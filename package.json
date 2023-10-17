@@ -1,0 +1,27 @@
+{
+  "name": "flag-builder",
+  "version": "1.0.0",
+  "description": "Flag Builder will be a supportive internal tool used for a parent program Semaphore. It will be used to construct Data Specification (DSPECS) files. It will handle instructing how the Dspec should be constructed, provide a graphic interface to do so, provide what has already been added to the parent program, and detect and mark things that the Dspec requires that are not in the parent program.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:client": "tsc -b ./Client",
+    "build:server": "tsc -b ./Server",
+    "server": "node ./ServerBuild/index.js"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/conrad-blucher-institute/flag-builder.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/conrad-blucher-institute/flag-builder/issues"
+  },
+  "homepage": "https://github.com/conrad-blucher-institute/flag-builder#readme",
+  "dependencies": {
+    "@types/express": "^4.17.19",
+    "express": "^4.18.2"
+  }
+}
