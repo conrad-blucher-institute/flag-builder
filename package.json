@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:client": "tsc -b ./Client && @powershell copy -r ./Client/pages ./ClientBuild",
+    "build:client": "tsc -b ./Client && @powershell copy -r ./Client/pages/* ./ClientBuild",
     "build:server": "tsc -b ./Server",
     "server": "node ./ServerBuild/index.js"
   },
