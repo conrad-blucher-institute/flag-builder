@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:client": "tsc -b ./Client && @powershell copy -r ./Client/pages ./ClientBuild/pages",
+    "build:client": "tsc -b ./Client && @powershell copy -r ./Client/pages ./ClientBuild",
     "build:server": "tsc -b ./Server",
     "server": "node ./ServerBuild/index.js"
   },
@@ -23,6 +23,7 @@
     "@types/express": "^4.17.19",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "typescript": "^5.2.2"
   }
 }

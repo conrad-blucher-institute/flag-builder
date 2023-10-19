@@ -6,14 +6,16 @@ Flag Builder will be a supportive internal tool used for a parent program Semaph
 
 ## Development notes
 
-Dependancies
-```npm i```
+### Dependancies
+```npm install```
+```npm install typescript```
+.env file with PORT=[portNumber]
 
-Building Backend:
+### Building Backend:
 ```npm run build:server```
 
-Building Frontend:
+### Building Frontend:
 ```npm run build:client```
 
-Running Server:
+### Running Server:
 ```npm run server```

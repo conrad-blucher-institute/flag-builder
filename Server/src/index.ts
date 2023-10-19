@@ -28,7 +28,7 @@ const port = process.env.PORT;
 
 //Declare the dist directory as our static dir, and host it. Anything that hits
 //the / endpoint will get the dist dir back
-const publicPath = path.join(__dirname, '../ClientBuild/pages');
+const publicPath = path.join(__dirname, '../ClientBuild');
 app.use(express.static(publicPath));
 
 //Start are server on the port we selected.
