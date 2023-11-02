@@ -13,19 +13,26 @@
 //import {ORM} from "./ORM"
 
 export class ServerComms {
-    private ServerEndpoint: string; // Idk the type yet so string for now
+    private ServerEndpoint: string = 'http://localhost:8000'; // Idk the type yet so string for now
 
     constructor(ServerEndpoint: string){
         this.ServerEndpoint = ServerEndpoint;
     }
 
-    public requestUnits(){
+
+    /**
+     * Requests units from the DB
+     * @returns A ref source rows (ID, code, displayName, notes)
+     */
+    public async requestUnits(){
         //let orm = new ORM();
 
         //let units = orm.getDistinctUnits();
 
         let units = 'meter';
 
+        let response = await fetch(`${this.ServerEndpoint}\\units`);
+        let data = await response.json()
         return units;
     }
 }

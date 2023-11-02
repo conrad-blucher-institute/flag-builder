@@ -16,7 +16,7 @@ import express from "express";
 import path from "path";
 import dotenv from "dotenv";
 
-import { ServerComms } from "./ServerComms";
+import { ORM } from "./ORM";
 
 //Load in .env file.
 dotenv.config();
@@ -32,17 +32,18 @@ const port = process.env.PORT;
 const publicPath = path.join(__dirname, '../ClientBuild');
 app.use(express.static(publicPath));
 
+
+const orm = new ORM();
+
 //Start are server on the port we selected.
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
 
 app.get('/units', (req, res) => {
-  let serverComms = new ServerComms('/units');
-
-  let units = serverComms.requestUnits();
-
-  res.send(JSON.stringify(units));
+  orm.getDistinctUnits().then((data) => {
+    res.send(JSON.stringify(data))
+  });
 });
 
 app.get('/location', (req, res) => {
