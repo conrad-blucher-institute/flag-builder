@@ -20,14 +20,12 @@ export class ServerComms {
     }
 
     public requestUnits(){
-        return new Promise((resolve, reject) => {
-            //let orm = new ORM();
+        //let orm = new ORM();
 
-            //let units = orm.getDistinctUnits();
+        //let units = orm.getDistinctUnits();
 
-            let units = 'meter';
+        let units = 'meter';
 
-            return resolve(units);
-        });
+        return units;
     }
 }
