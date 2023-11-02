@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:client": "tsc -b ./Client && @powershell copy -r ./Client/pages/* ./ClientBuild",
+    "build:client": "npx webpack && @powershell copy -r ./Client/pages/* ./ClientBuild",
     "build:server": "tsc -b ./Server",
     "server": "node ./ServerBuild/index.js"
   },
@@ -25,6 +25,11 @@
     "express": "^4.18.2",
     "path": "^0.12.7",
     "sqlite3": "^5.1.6",
-    "typescript": "^5.2.2"
+    "ts-loader": "^9.5.0",
+    "typescript": "^5.2.2",
+    "webpack": "^5.89.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^5.1.4"
   }
 }

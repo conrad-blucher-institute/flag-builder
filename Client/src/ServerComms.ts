@@ -33,6 +33,6 @@ export class ServerComms {
 
         let response = await fetch(`${this.ServerEndpoint}\\units`);
         let data = await response.json()
-        return units;
+        return data;
     }
 }

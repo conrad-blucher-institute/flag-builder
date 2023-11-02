@@ -42,7 +42,8 @@ app.listen(port, () => {
 
 app.get('/units', (req, res) => {
   orm.getDistinctUnits().then((data) => {
-    res.send(JSON.stringify(data))
+    console.warn(data);
+    res.send(JSON.stringify(data));
   });
 });
 
