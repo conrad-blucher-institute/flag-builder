@@ -1,12 +1,12 @@
 // -*- coding: utf-8 -*-
-//ORM.js
+//ORM.ts
 //----------------------------------
 // Created By: Matthew Kastl
 // Created Date: 10/26/2023
 // version 1.0
 //----------------------------------
 // """This file is an ORM for sqlite
-// built for the FlagBuilder
+// built for Flag Builder
 //  """ 
 //----------------------------------
 //Imports

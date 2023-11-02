@@ -12,10 +12,11 @@
 // 
 //
 //Imports
-
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
+
+import { ServerComms } from "./ServerComms";
 
 //Load in .env file.
 dotenv.config();
@@ -34,4 +35,36 @@ app.use(express.static(publicPath));
 //Start are server on the port we selected.
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
+});
+
+app.get('/units', (req, res) => {
+  let serverComms = new ServerComms('/units');
+
+  let units = serverComms.requestUnits();
+
+  res.send(JSON.stringify(units));
+});
+
+app.get('/location', (req, res) => {
+  console.log(req.query.un);
+  let testObj = {'msg': 'Location!'};
+  res.send(JSON.stringify(testObj));
+});
+
+app.get('/series', (req, res) => {
+  console.log(req.query.un);
+  let testObj = {'msg': 'Series!'};
+  res.send(JSON.stringify(testObj));
+});
+
+app.get('/source', (req, res) => {
+  console.log(req.query.un);
+  let testObj = {'msg': 'Source!'};
+  res.send(JSON.stringify(testObj));
+});
+
+app.get('/datum', (req, res) => {
+  console.log(req.query.un);
+  let testObj = {'msg': 'Datum!'};
+  res.send(JSON.stringify(testObj));
 });
