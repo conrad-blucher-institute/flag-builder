@@ -9,11 +9,9 @@
 // the client and the database for Flag Builder
 // """ 
 //----------------------------------
-// Imports
-//import {ORM} from "./ORM"
 
 export class ServerComms {
-    private ServerEndpoint: string = 'http://localhost:8000'; // Idk the type yet so string for now
+    private ServerEndpoint: string = 'http://localhost:8000';
 
     constructor(ServerEndpoint: string){
         this.ServerEndpoint = ServerEndpoint;
@@ -21,18 +19,14 @@ export class ServerComms {
 
 
     /**
-     * Requests units from the DB
+     * Requests variable from the DB
      * @returns A ref source rows (ID, code, displayName, notes)
      */
-    public async requestUnits(){
-        //let orm = new ORM();
+    public async requestVariable(variable: string){
+        let response = await fetch(`${this.ServerEndpoint}\\${variable}`);
 
-        //let units = orm.getDistinctUnits();
-
-        let units = 'meter';
-
-        let response = await fetch(`${this.ServerEndpoint}\\units`);
         let data = await response.json()
+        
         return data;
     }
 }
