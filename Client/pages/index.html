@@ -1,44 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="shortcut icon" href="#">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="shortcut icon" href="#" />
+    <link rel=”stylesheet” href=”./dist/styles/style.css”/>
     <title>HTML 5 Boilerplate</title>
   </head>
   <body>
-    Hello World!
-    <script>var exports = {};</script>
-	  <script type="module" src="./index.js"></script>
+    <script>
+      var exports = {};
+    </script>
+    <script type="module" src="./index.js"></script>
 
-    <form id="myForm">
-      <label for="source">Source:</label>
-      <select id="source">
-        <!-- Options will be dynamically added here using TypeScript -->
-      </select>
+    <form>
+      <div class="space-y-12">
+        <div class="border-b border-gray-900/10 pb-12">
+          <div class="sm:col-span-3">
+            <label
+              for="source"
+              class="block text-sm font-medium leading-6 text-gray-900"
+              >Source:</label
+            >
+            <div class="mt-2">
+              <select id="source" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                <!-- Options will be dynamically added here using TypeScript -->
+              </select>
+            </div>
+          </div>
 
-      <label for="series">Series:</label>
-      <select id="series">
-        <!-- Options will be dynamically added here using TypeScript -->
-      </select>
+          <div class="sm:col-span-3">
+            <label
+              for="series"
+              class="block text-sm font-medium leading-6 text-gray-900"
+              >Series:</label
+            >
+            <div class="mt-2">
+              <select id="series" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                <!-- Options will be dynamically added here using TypeScript -->
+              </select>
+            </div>
+          </div>
 
-      <label for="location">Location:</label>
-      <select id="location">
-        <!-- Options will be dynamically added here using TypeScript -->
-      </select>
+          <div class="sm:col-span-3">
+            <label
+              for="location"
+              class="block text-sm font-medium leading-6 text-gray-900"
+              >Location:</label
+            >
+            <div class="mt-2">
+              <select id="location" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                <!-- Options will be dynamically added here using TypeScript -->
+              </select>
+            </div>
+          </div>
 
-      <label for="units">Unit:</label>
-      <select id="units">
-        <!-- Options will be dynamically added here using TypeScript -->
-      </select>
+          <div class="sm:col-span-3">
+            <label
+              for="units"
+              class="block text-sm font-medium leading-6 text-gray-900"
+              >Units:</label
+            >
+            <div class="mt-2">
+              <select id="units" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                <!-- Options will be dynamically added here using TypeScript -->
+              </select>
+            </div>
+          </div>
 
-      <label for="datum">Datum:</label>
-      <select id="datum">
-        <!-- Options will be dynamically added here using TypeScript -->
-      </select>
+          <div class="sm:col-span-3">
+            <label
+              for="datum"
+              class="block text-sm font-medium leading-6 text-gray-900"
+              >Datum:</label
+            >
+            <div class="mt-2">
+              <select id="datum" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                <!-- Options will be dynamically added here using TypeScript -->
+              </select>
+            </div>
+          </div>
 
-      <button type="submit">Submit</button>
+          <button type="submit">Submit</button>
+        </div>
+      </div>
     </form>
   </body>
 </html>

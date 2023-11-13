@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:client": "npx webpack && @powershell copy -r ./Client/pages/* ./ClientBuild",
+    "build:tailwind": "postcss ./Client/src/tailwind.css -o ./Client/dist/styles/style.css",
+    "build:client": "npx webpack && @powershell copy -r ./Client/pages/* ./ClientBuild && @powershell copy -r ./Client/dist ./ClientBuild",
     "build:server": "tsc -b ./Server",
     "server": "node ./ServerBuild/index.js"
   },
@@ -21,10 +22,13 @@
   "homepage": "https://github.com/conrad-blucher-institute/flag-builder#readme",
   "dependencies": {
     "@types/express": "^4.17.19",
+    "autoprefixer": "^10.4.16",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "path": "^0.12.7",
+    "postcss-cli": "^10.1.0",
     "sqlite3": "^5.1.6",
+    "tailwindcss": "^3.3.5",
     "ts-loader": "^9.5.0",
     "typescript": "^5.2.2",
     "webpack": "^5.89.0"
