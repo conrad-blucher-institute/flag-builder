@@ -42,12 +42,12 @@ const cardTemplates = [
           <div class="TimingInfo" id="TimingInfo">
             <form>
               <label>Offset:</label><br>
-                <input type="time" id="tOffset" name="tOffset" title="Amount of time after the hour that the model should wait to run (e.g. 10 minutes)" required>
-                <small id="helperText">Amount of time after the hour that the model should wait to run (e.g. 10 minutes)</small><br>
+                <input type="text" pattern="^([1-7]?[0-9]|168):[0-5][0-9]:[0-5][0-9]$" placeholder="00:00:00" id="tOffset" name="tOffset" title="Time after the hour that the model should wait to run.HH:MM:SS (e.g. 0:10:00 (10min))" required>
+                <small id="helperText">Time after the hour that the model should wait to run. HH:MM:SS (e.g. 00:10:00 (10min))</small><br>
 
               <label>Time Interval:</label><br>
-                <input type="time" id="tInterval" name="tInterval" title="Time between each model prediction (e.g. 0:06 (6min), 1:00 (1hr), 3:00 (3hr))" required>
-                <small id="helperText">Time between each model prediction (e.g. 0:06 (6min), 1:00 (1hr), 3:00 (3hr))</small><br>
+                <input type="text" pattern="^([1-7]?[0-9]|168):[0-5][0-9]:[0-5][0-9]$" placeholder="00:00:00" id="tInterval" name="tInterval" title="Time between each model prediction. HH:MM:SS (e.g. 01:00:00 (1hr))" required>
+                <small id="helperText">Time between each model prediction. HH:MM:SS (e.g. 01:00:00 (1hr))</small><br>
 
               <button type="submit">Submit</button>
             </form>
