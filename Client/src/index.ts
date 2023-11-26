@@ -43,7 +43,7 @@ const cardTemplates = [
                 <small id="helperText">Amount of time after the hour that the model should wait to run (e.g. 10 minutes)</small><br>
 
               <label>Time Interval:</label><br>
-                <input type="time" id="tInterval" name="tInterval" title="Interval of time between each model prediction (e.g. 0:06 (6min), 1:00 (1hr), 3:00 (3hr))" required>
+                <input type="time" id="tInterval" name="tInterval" title="Time between each model prediction (e.g. 0:06 (6min), 1:00 (1hr), 3:00 (3hr))" required>
                 <small id="helperText">Time between each model prediction (e.g. 0:06 (6min), 1:00 (1hr), 3:00 (3hr))</small><br>
 
               <button type="submit">Submit</button>
@@ -73,7 +73,7 @@ const cardTemplates = [
           <small id="helperText">Name of the location that the model is making predictions for (e.g. South Bird Island)</small><br>
 
         <label>Interval:</label><br>
-          <input type="time" id="oInterval" name="oInterval" title="Interval of time between each model prediction (e.g. 0:06 (6min), 1:00 (1hr), 3:00 (3hr))" required>
+          <input type="time" id="oInterval" name="oInterval" title="Time between each model prediction (e.g. 0:06 (6min), 1:00 (1hr), 3:00 (3hr))" required>
           <small id="helperText">Time between each model prediction (e.g. 0:06 (6min), 1:00 (1hr), 3:00 (3hr))</small><br>
 
         <label for="units">Unit:</label><br>
@@ -83,7 +83,7 @@ const cardTemplates = [
           <small id="helperText">Units of measurement for the output data (e.g. meter)</small><br>
 
         <label for="datum">Datum (optional):</label><br>
-          <select name="oSelectDatum" class="datum" title="The vertical datum of the data (e.g. Mean Sea Level (MSL))">
+          <select name="oSelectDatum" class="datum" title="Vertical datum of the data (e.g. Mean Sea Level (MSL))">
             <!-- Options will be dynamically added here using TypeScript -->
           </select>
           <small id="helperText">Vertical datum of the data (e.g. Mean Sea Level (MSL))</small><br>
