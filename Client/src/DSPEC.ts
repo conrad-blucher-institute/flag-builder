@@ -18,8 +18,8 @@ class DSPEC {
         
         const dspecData: any = {... this.metaInfo}; // any to make dspecData a loose object
         dspecData.timingInfo = this.timeInfo;
-        dspecData.outputInfo = this.timeInfo;
-        dspecData.inputs = this.timeInfo;
+        dspecData.outputInfo = this.outputInfo;
+        dspecData.inputs = this.inputSpecifications;
 
         const fileAnchor = document.createElement('a') as HTMLAnchorElement;
         var file = new Blob([JSON.stringify(dspecData)], {type: 'text/plain'})
