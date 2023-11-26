@@ -42,11 +42,11 @@ const cardTemplates = [
           <div class="TimingInfo" id="TimingInfo">
             <form>
               <label>Offset:</label><br>
-                <input type="text" pattern="^([1-7]?[0-9]|168):[0-5][0-9]:[0-5][0-9]$" placeholder="00:00:00" id="tOffset" name="tOffset" title="Time after the hour that the model should wait to run.HH:MM:SS (e.g. 0:10:00 (10min))" required>
+                <input type="text" pattern="^(0?[0-9]?[0-9]|1[0-6][0-8]):[0-5][0-9]:[0-5][0-9]$" placeholder="00:00:00" id="tOffset" name="tOffset" title="Time after the hour that the model should wait to run.HH:MM:SS (e.g. 0:10:00 (10min))" required>
                 <small id="helperText">Time after the hour that the model should wait to run. HH:MM:SS (e.g. 00:10:00 (10min))</small><br>
 
               <label>Time Interval:</label><br>
-                <input type="text" pattern="^([1-7]?[0-9]|168):[0-5][0-9]:[0-5][0-9]$" placeholder="00:00:00" id="tInterval" name="tInterval" title="Time between each model prediction. HH:MM:SS (e.g. 01:00:00 (1hr))" required>
+                <input type="text" pattern="^(0?[0-9]?[0-9]|1[0-6][0-8]):[0-5][0-9]:[0-5][0-9]$" placeholder="00:00:00" id="tInterval" name="tInterval" title="Time between each model prediction. HH:MM:SS (e.g. 01:00:00 (1hr))" required>
                 <small id="helperText">Time between each model prediction. HH:MM:SS (e.g. 01:00:00 (1hr))</small><br>
 
               <button type="submit">Submit</button>
@@ -62,8 +62,8 @@ const cardTemplates = [
           <small id="helperText">Method for unpacking the model predictions (e.g. one_packed_float)</small><br>
 
         <label>Lead Time:</label><br>
-          <input type="time" id="oLeadTime" name="oLeadTime" title="Span of time between model runtime and time the prediction is computed for (e.g. 12:00 (12hr))" required>
-          <small id="helperText">Span of time between model runtime and time the prediction is computed for (e.g. 12:00 (12hr))</small><br>
+          <input type="text" pattern="^(0?[0-9]?[0-9]|1[0-6][0-8]):[0-5][0-9]:[0-5][0-9]$" placeholder="00:00:00" id="oLeadTime" name="oLeadTime" title="Span of time between model runtime and time the prediction is computed for. HH:MM:SS (e.g. 12:00:00 (12hr))" required>
+          <small id="helperText">Span of time between model runtime and time the prediction is computed for HH:MM:SS (e.g. 12:00:00 (12hr))</small><br>
 
         <label for="series">Series:</label><br>
           <input type="series" id="oSeries" name="oSeries" title="Name of the output data series produced by the model (e.g. Air Temperature)" required>
@@ -76,8 +76,8 @@ const cardTemplates = [
           <small id="helperText">Name of the location that the model is making predictions for (e.g. South Bird Island)</small><br>
 
         <label>Interval:</label><br>
-          <input type="time" id="oInterval" name="oInterval" title="Time between each model prediction (e.g. 0:06 (6min), 1:00 (1hr), 3:00 (3hr))" required>
-          <small id="helperText">Time between each model prediction (e.g. 0:06 (6min), 1:00 (1hr), 3:00 (3hr))</small><br>
+          <input type="text" pattern="^(0?[0-9]?[0-9]|1[0-6][0-8]):[0-5][0-9]:[0-5][0-9]$" placeholder="00:00:00" id="oInterval" name="oInterval" title="Time between each model prediction. HH:MM:SS (e.g. 01:00:00 (1hr)" required>
+          <small id="helperText">Time between each model prediction. HH:MM:SS (e.g. 01:00:00 (1hr))</small><br>
 
         <label for="units">Unit:</label><br>
           <select name="oSelectUnits" class="units" title="Units of measurement for the output data (e.g. meter)">
@@ -132,8 +132,8 @@ const cardTemplates = [
         <small id="helperText">Data type of input data (e.g. float)</small><br>
 
       <label>Interval:</label><br>
-        <input type="text" id="iInterval" name="iInterval" title="Time between each model prediction (e.g. 0:06 (6min), 1:00 (1hr), 3:00 (3hr))" required>
-        <small id="helperText">Time between each model prediction (e.g. 0:06 (6min), 1:00 (1hr), 3:00 (3hr))</small><br>
+        <input type="text" pattern="^(0?[0-9]?[0-9]|1[0-6][0-8]):[0-5][0-9]:[0-5][0-9]$" placeholder="00:00:00" id="iInterval" name="iInterval" title="Time between each model prediction. HH:MM:SS (e.g. 01:00:00 (1hr))" required>
+        <small id="helperText">Time between each model prediction. HH:MM:SS (e.g. 01:00:00 (1hr))</small><br>
 
       <button type="submit" id="btnFinish">Finish & Download</button>
       <button type="submit" id="btnAdd">Add Specification</button>
