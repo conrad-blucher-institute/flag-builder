@@ -154,14 +154,15 @@ const DSPECHANDLER = new DSPEC();
 async function populateForm(){
   const variables: string[] = ['source', 'series', 'location', 'units', 'datum'] // Better way to do this?
 
+  // Loop through the drop down types
   for (const variable of variables) {
+    // Get dropdowns that match the type
     const formElements = document.getElementsByClassName(variable) as HTMLSelectElement;
 
     let data: { displayName: string }[] = await sc.requestVariable(variable);
-
     
+    // Add the options if the drop down doesn't already have them
     for(let i = 0; i < formElements.length; i++){ // Prevents duplicates
-
       if(formElements[i].children.length <= 0) {
         const plzSelectOp = document.createElement('option');
         plzSelectOp.defaultSelected = true;
