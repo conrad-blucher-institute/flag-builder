@@ -1,0 +1,19 @@
+# DSPEC Class
+- [X] Have a JSON template
+- [ ] Have methods that the form submission can call
+- [ ] Have methods that handle marker appending
+- [ ] Download the DSPEC as JSON
+- [ ] Check a DSPEC
+
+
+# Form Driver
+- [ ] The rest of the listeners @bestrada33
+- [ ] SELECTOR BOXES not here opetion to init marker
+- [ ] Create marker pop up (send with dspec public method call)
+- [ ] SELECTOR BOXES Start with no value selected value attribute set to ""
+
+# Page
+- [ ] Info on hover boxes @bestrada33
+- [ ] Delete extra form btn @bestrada33
+- [ ] Final submit btn @bestrada33
+- [ ] Change how time selection is working

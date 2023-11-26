@@ -1,0 +1,42 @@
+body {
+    background-color: #212121;
+}
+.cards {
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.Card {
+    box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.2); /* this adds the "card" effect */
+    padding: 16px;
+    text-align: left;
+    height: auto;
+    width: 400px;
+    border-radius: 25px;
+    background: whitesmoke;
+    padding: 20px;
+    
+     
+}
+button {
+    float: right;
+    background-color: #36b3a8;
+    border-radius: 25px;
+    height: 30px;
+    width: 75px;
+}
+h1 {
+    text-align: center;
+}
+
+input {
+    background: whitesmoke;
+}
+
+#helperText {
+    font-size: x-small;
+    display: block;
+}

@@ -44,7 +44,7 @@ app.listen(port, () => {
 
 app.get('/source', (req, res) => {
   orm.getDistinctSource().then((data) => {
-    console.warn(data);
+    //console.warn(data);
     res.send(JSON.stringify(data));
   });
 });
@@ -52,7 +52,7 @@ app.get('/source', (req, res) => {
 
 app.get('/series', (req, res) => {
   orm.getDistinctSeries().then((data) => {
-    console.warn(data);
+    //console.warn(data);
     res.send(JSON.stringify(data));
   });
 });
@@ -60,7 +60,7 @@ app.get('/series', (req, res) => {
 
 app.get('/location', (req, res) => {
   orm.getDistinctLocation().then((data) => {
-    console.warn(data);
+    //console.warn(data);
     res.send(JSON.stringify(data));
   });
 });
@@ -68,7 +68,7 @@ app.get('/location', (req, res) => {
 
 app.get('/units', (req, res) => {
   orm.getDistinctUnits().then((data) => {
-    console.warn(data);
+    //console.warn(data);
     res.send(JSON.stringify(data));
   });
 });
@@ -76,7 +76,7 @@ app.get('/units', (req, res) => {
 
 app.get('/datum', (req, res) => {
   orm.getDistinctDatum().then((data) => {
-    console.warn(data);
+    //console.warn(data);
     res.send(JSON.stringify(data));
   });
 });

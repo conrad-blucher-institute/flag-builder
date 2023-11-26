@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:client": "npx webpack && @powershell copy -r ./Client/pages/* ./ClientBuild",
+    "build:client": "npx webpack && @powershell copy -r ./Client/pages/* ./ClientBuild && @powershell copy -r ./Client/styles/* ./ClientBuild" ,
     "build:server": "tsc -b ./Server",
     "server": "node ./ServerBuild/index.js"
   },
