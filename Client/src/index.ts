@@ -171,7 +171,6 @@ async function populateForm(){
         formElements[i].appendChild(plzSelectOp);
   
         data.forEach((item: { displayName: string }) => {
-          console.log(formElements[i].children.length);
           const option = document.createElement('option');
           option.value = item.displayName;
           option.text = item.displayName;
