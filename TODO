@@ -13,7 +13,7 @@
 - [ ] SELECTOR BOXES Start with no value selected value attribute set to ""
 
 # Page
-- [ ] Info on hover boxes @bestrada33
+- [X] Info on hover boxes @bestrada33
 - [ ] Delete extra form btn @bestrada33
 - [ ] Final submit btn @bestrada33
 - [ ] Change how time selection is working
