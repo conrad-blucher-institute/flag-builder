@@ -5,6 +5,7 @@
 - [X] Download the DSPEC as JSON
 - [ ] Check a DSPEC
 - [ ] Convert times to seconds
+- [ ] Datum should be optional
 
 
 # Form Driver
@@ -20,3 +21,5 @@
 - [X] Final submit btn @bestrada33
 - [X] Change how time selection is working
 - [ ] Add banner
+- [ ] Need range for the input specification
+- [ ] Need datum for the input specification
