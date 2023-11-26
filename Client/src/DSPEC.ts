@@ -2,7 +2,7 @@
 
 class DSPEC {
 
-    private metaInfo: object;
+    private metaInfo: object; 
     private timeInfo: object;
     private outputInfo: object;
     private inputSpecifications: object[];
@@ -12,6 +12,20 @@ class DSPEC {
         this.timeInfo = {};
         this.outputInfo = {};
         this.inputSpecifications = [];
+    }
+
+    public saveDspec() {
+        
+        const dspecData: any = {... this.metaInfo}; // any to make dspecData a loose object
+        dspecData.timingInfo = this.timeInfo;
+        dspecData.outputInfo = this.timeInfo;
+        dspecData.inputs = this.timeInfo;
+
+        const fileAnchor = document.createElement('a') as HTMLAnchorElement;
+        var file = new Blob([JSON.stringify(dspecData)], {type: 'text/plain'})
+        fileAnchor.href = URL.createObjectURL(file);
+        fileAnchor.download = 'DSPEC.json';
+        fileAnchor.click();
     }
 
     public updateMeta(formData: FormData) {
@@ -39,7 +53,7 @@ class DSPEC {
         const tInterval = formData.get('tInterval');
         if(!tInterval) { console.error('Time Interval not found in form submission'); }
 
-        this.metaInfo = {
+        this.timeInfo = {
             tOffset: tOffset,
             tInterval: tInterval,
         }
@@ -63,10 +77,10 @@ class DSPEC {
         if(!oSelectUnits) { console.error('Output unit interval not found in form submission'); }
 
 
-        this.metaInfo = {
+        this.outputInfo = {
             outputMethod: oOutputMethod,
             leadTime: oLeadTime,
-            series: oOutputMethod,
+            series: oSeries,
             location: oSelectLocation,
             interval: oInterval,
             datum: oSelectDatum,
@@ -74,9 +88,44 @@ class DSPEC {
         }
     }
     public appendInputSpecification(formData: FormData) {
-
+        const inputSpecification = this.parseInputSpecificationFrom(formData);
+        this.inputSpecifications.push(inputSpecification);
     }
+
     public updateInputSpecification(index: number, formData: FormData) {
 
+        if(index < 0 || index >= this.inputSpecifications.length) { throw RangeError(`Form entry ${formData} caused out of range error in updateInputSpecification`); }
+        else {
+            this.inputSpecifications[index] = this.parseInputSpecificationFrom(formData);
+        }
+    }
+
+    private parseInputSpecificationFrom(formData: FormData): object {
+        const iName = formData.get('iName');
+        if(!iName) { console.error('Output method not found in form submission'); }
+        const iSelectLocation = formData.get('iSelectLocation');
+        if(!iSelectLocation) { console.error('Output lead time not found in form submission'); }
+        const iSelectSource = formData.get('iSelectSource');
+        if(!iSelectSource) { console.error('Output data series not found in form submission'); }
+        const iSelectSeries = formData.get('iSelectSeries');
+        if(!iSelectSeries) { console.error('Output data location not found in form submission'); }
+        const iSelectUnits = formData.get('iSelectUnits');
+        if(!iSelectUnits) { console.error('Output Interval not found in form submission'); }
+        const iType = formData.get('iType');
+        if(!iType) { console.error('Output Interval not found in form submission'); }
+        const iInterval = formData.get('iInterval');
+        if(!iInterval) { console.error('Output data series not found in form submission'); }
+
+
+        return {
+            _name: iName,
+            location: iSelectLocation,
+            source: iSelectSource,
+            series: iSelectSeries,
+            unit: iSelectUnits,
+            type: iType,
+            iInterval: iInterval,
+        }
     }
 }
+export { DSPEC }

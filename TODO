@@ -1,8 +1,8 @@
 # DSPEC Class
 - [X] Have a JSON template
-- [ ] Have methods that the form submission can call
+- [X] Have methods that the form submission can call
 - [ ] Have methods that handle marker appending
-- [ ] Download the DSPEC as JSON
+- [X] Download the DSPEC as JSON
 - [ ] Check a DSPEC
 
 
