@@ -26,7 +26,9 @@ button {
     background-color: #36b3a8;
     border-radius: 25px;
     height: 30px;
-    width: 75px;
+    width: auto;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 h1 {
     text-align: center;

@@ -8,6 +8,9 @@
 // """This file handles client operations
 //  """ 
 //----------------------------------
+
+import { DSPEC } from "./DSPEC"
+
 const cardTemplates = [
   `<div class="cards">
     <div class="Card">
@@ -132,7 +135,8 @@ const cardTemplates = [
         <input type="text" id="iInterval" name="iInterval" title="Time between each model prediction (e.g. 0:06 (6min), 1:00 (1hr), 3:00 (3hr))" required>
         <small id="helperText">Time between each model prediction (e.g. 0:06 (6min), 1:00 (1hr), 3:00 (3hr))</small><br>
 
-      <button type="submit">Submit</button>
+      <button type="submit" id="btnFinish">Finish & Download</button>
+      <button type="submit" id="btnAdd">Add Specification</button>
     </form>
   </div>
 </div>`
@@ -141,6 +145,8 @@ const cardTemplates = [
 import { ServerComms } from './ServerComms';
 
 let sc = new ServerComms('http://localhost:8000');
+
+const DSPECHANDLER = new DSPEC();
 
 /**
  * Populates web form with variables from the DB
@@ -170,43 +176,77 @@ document.addEventListener('DOMContentLoaded', init);
 
 function init(){
   populateForm();
-
-  appendNextCard(); // Appends the first card
+  appendNextCard(''); // Appends the first card
 }
 
 
-function formListener(this: HTMLElement, e: Event) {
+function formListener(this: HTMLElement, e: SubmitEvent) {
   e.preventDefault();
-  const data = new FormData(e.target as HTMLFormElement);
-  console.log(data);
-  appendNextCard();
+
+  const form = e.target! as HTMLFormElement;
+  const formId = form.parentElement!.id;
+  const formData = new FormData(form);
+  const submitBtnID = e.submitter!.id;
+  switch(formId) {
+    case 'MetaForm':
+      DSPECHANDLER.updateMeta(formData);
+      appendNextCard(formId);
+      break;
+    case 'TimingInfo':
+      DSPECHANDLER.updateTime(formData);
+      appendNextCard(formId);
+      break;
+    case 'OutputInfo':
+      DSPECHANDLER.updateOutput(formData);
+      appendNextCard(formId);
+      break;
+    case 'InputInfo':
+
+      DSPECHANDLER.appendInputSpecification(formData);
+
+      // If add btn, then submit data and add new form
+      // If finish btn then submit data and download
+      if(submitBtnID === 'btnAdd') {
+        appendNextCard(formId);
+      } else if(submitBtnID === 'btnFinish') {
+        DSPECHANDLER.saveDspec();
+      }
+      break;
+    default:
+      console.error('fromListener could not map form submission to handler method.');
+
+  }
 }
 
 
+let state = 0; // State prevents incorrect cards from being appended if a form is resubmitted
 const cards = document.getElementById('cards') as HTMLElement;
-let STATE: string = 'INIT';
-function appendNextCard(){
-  if(STATE === 'INIT') {
+function appendNextCard(formId: string){
+  if(formId === '' && state === 0) {
     cards.insertAdjacentHTML('beforeend', cardTemplates[0]);
     const metaForm = document.getElementById("MetaForm")!;
     metaForm.addEventListener('submit', formListener);
-    STATE = 'META';
+    state++;
   }
-  else if(STATE === 'META') {
+  else if(formId === 'MetaForm' && state === 1) {
     cards.insertAdjacentHTML('beforeend', cardTemplates[1]);
-    const metaForm = document.getElementById("TimingInfo")!;
-    metaForm.addEventListener('submit', formListener);
-    STATE = 'TIME';
+    const TimingInfo = document.getElementById("TimingInfo")!;
+    TimingInfo.addEventListener('submit', formListener);
+    state++;
   }
-  else if(STATE === 'TIME') {
+  else if(formId === 'TimingInfo' && state === 2) {
     cards.insertAdjacentHTML('beforeend', cardTemplates[2]);
-    const metaForm = document.getElementById("OutputInfo")!;
-    metaForm.addEventListener('submit', formListener);
+    const OutputInfo = document.getElementById("OutputInfo")!;
+    OutputInfo.addEventListener('submit', formListener);
     populateForm();
-    STATE = 'OUTPUT';
+    state++;
   }
-  else if(STATE === 'OUTPUT') {
+  else if(formId === 'OutputInfo' || formId === 'InputInfo') {
     cards.insertAdjacentHTML('beforeend', cardTemplates[3]);
+    const InputInfo = document.getElementById("InputInfo")!;
+    InputInfo.addEventListener('submit', formListener);
     populateForm();
   }
 }
+
+

@@ -18,8 +18,8 @@ class DSPEC {
         
         const dspecData: any = {... this.metaInfo}; // any to make dspecData a loose object
         dspecData.timingInfo = this.timeInfo;
-        dspecData.outputInfo = this.timeInfo;
-        dspecData.inputs = this.timeInfo;
+        dspecData.outputInfo = this.outputInfo;
+        dspecData.inputs = this.inputSpecifications;
 
         const fileAnchor = document.createElement('a') as HTMLAnchorElement;
         var file = new Blob([JSON.stringify(dspecData)], {type: 'text/plain'})
@@ -102,19 +102,19 @@ class DSPEC {
 
     private parseInputSpecificationFrom(formData: FormData): object {
         const iName = formData.get('iName');
-        if(!iName) { console.error('Output method not found in form submission'); }
+        if(!iName) { console.error('Input name not found in form submission'); }
         const iSelectLocation = formData.get('iSelectLocation');
-        if(!iSelectLocation) { console.error('Output lead time not found in form submission'); }
+        if(!iSelectLocation) { console.error('Input location time not found in form submission'); }
         const iSelectSource = formData.get('iSelectSource');
-        if(!iSelectSource) { console.error('Output data series not found in form submission'); }
+        if(!iSelectSource) { console.error('Input data source not found in form submission'); }
         const iSelectSeries = formData.get('iSelectSeries');
-        if(!iSelectSeries) { console.error('Output data location not found in form submission'); }
+        if(!iSelectSeries) { console.error('Input data series not found in form submission'); }
         const iSelectUnits = formData.get('iSelectUnits');
-        if(!iSelectUnits) { console.error('Output Interval not found in form submission'); }
+        if(!iSelectUnits) { console.error('Input units not found in form submission'); }
         const iType = formData.get('iType');
-        if(!iType) { console.error('Output Interval not found in form submission'); }
+        if(!iType) { console.error('Input type not found in form submission'); }
         const iInterval = formData.get('iInterval');
-        if(!iInterval) { console.error('Output data series not found in form submission'); }
+        if(!iInterval) { console.error('Input interval series not found in form submission'); }
 
 
         return {

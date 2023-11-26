@@ -4,10 +4,11 @@
 - [ ] Have methods that handle marker appending
 - [X] Download the DSPEC as JSON
 - [ ] Check a DSPEC
+- [ ] Convert times to seconds
 
 
 # Form Driver
-- [ ] The rest of the listeners @bestrada33
+- [X] The rest of the listeners @bestrada33
 - [ ] SELECTOR BOXES not here opetion to init marker
 - [ ] Create marker pop up (send with dspec public method call)
 - [ ] SELECTOR BOXES Start with no value selected value attribute set to ""
@@ -15,5 +16,7 @@
 # Page
 - [X] Info on hover boxes @bestrada33
 - [ ] Delete extra form btn @bestrada33
-- [ ] Final submit btn @bestrada33
+- [ ] Input form should update input not append a new one on resubmission
+- [X] Final submit btn @bestrada33
 - [ ] Change how time selection is working
+- [ ] Add banner
