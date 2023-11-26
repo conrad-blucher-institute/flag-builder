@@ -70,7 +70,7 @@ const cardTemplates = [
           <small id="helperText">Name of the output data series produced by the model (e.g. Air Temperature)</small><br>
 
         <label for="location">Location:</label><br>
-          <select name="oSelectLocation" class="location" title="Name of the location that the model is making predictions for (e.g. South Bird Island)">
+          <select name="oSelectLocation" class="location" title="Name of the location that the model is making predictions for (e.g. South Bird Island)" required>
             <!-- Options will be dynamically added here using TypeScript -->
           </select>
           <small id="helperText">Name of the location that the model is making predictions for (e.g. South Bird Island)</small><br>
@@ -80,7 +80,7 @@ const cardTemplates = [
           <small id="helperText">Time between each model prediction. HH:MM:SS (e.g. 01:00:00 (1hr))</small><br>
 
         <label for="units">Unit:</label><br>
-          <select name="oSelectUnits" class="units" title="Units of measurement for the output data (e.g. meter)">
+          <select name="oSelectUnits" class="units" title="Units of measurement for the output data (e.g. meter)" required>
             <!-- Options will be dynamically added here using TypeScript -->
           </select>
           <small id="helperText">Units of measurement for the output data (e.g. meter)</small><br>
@@ -104,25 +104,25 @@ const cardTemplates = [
         <small id="helperText">Display name of data variable (e.g. x_wind)</small><br>
 
       <label>Location:</label><br>
-        <select name="iSelectLocation" class="location" title="Name of the location that the input data is for (e.g. South Bird Island)">
+        <select name="iSelectLocation" class="location" title="Name of the location that the input data is for (e.g. South Bird Island)" required>
           <!-- Options will be dynamically added here using TypeScript -->
         </select>
         <small id="helperText">Name of the location that the input data is for (e.g. South Bird Island)</small><br>
 
       <label>Source:</label><br>
-        <select name="iSelectSource" class="source" title="Source of input data (e.g. National Digital Forecast Database (NDFD))">
+        <select name="iSelectSource" class="source" title="Source of input data (e.g. National Digital Forecast Database (NDFD))" required>
           <!-- Options will be dynamically added here using TypeScript -->
         </select>
         <small id="helperText">Source of input data (e.g. National Digital Forecast Database (NDFD))</small><br>
 
       <label>Series:</label><br>
-        <select name="iSelectSeries" class="series" title="Code name of the input data series (e.g. pAirTemp)">
+        <select name="iSelectSeries" class="series" title="Code name of the input data series (e.g. pAirTemp)" required>
           <!-- Options will be dynamically added here using TypeScript -->
         </select>
         <small id="helperText">Code name of the input data series (e.g. pAirTemp)</small><br>
 
       <label>Unit:</label><br>
-        <select name="iSelectUnits" class="units" title="Units of measurement for the input data (e.g. celsius)">
+        <select name="iSelectUnits" class="units" title="Units of measurement for the input data (e.g. celsius)" required>
         <!-- Options will be dynamically added here using TypeScript -->
         </select>
         <small id="helperText">Units of measurement for the input data (e.g. celsius)</small><br>
@@ -154,18 +154,30 @@ const DSPECHANDLER = new DSPEC();
 async function populateForm(){
   const variables: string[] = ['source', 'series', 'location', 'units', 'datum'] // Better way to do this?
 
+  // Loop through the drop down types
   for (const variable of variables) {
+    // Get dropdowns that match the type
     const formElements = document.getElementsByClassName(variable) as HTMLSelectElement;
 
     let data: { displayName: string }[] = await sc.requestVariable(variable);
-
-    for(let i = 0; i < formElements.length; i++){
-      data.forEach((item: { displayName: string }) => {
-        const option = document.createElement('option');
-        option.value = item.displayName;
-        option.text = item.displayName;
-        formElements[i].appendChild(option);
-      });
+    
+    // Add the options if the drop down doesn't already have them
+    for(let i = 0; i < formElements.length; i++){ // Prevents duplicates
+      if(formElements[i].children.length <= 0) {
+        const plzSelectOp = document.createElement('option');
+        plzSelectOp.defaultSelected = true;
+        plzSelectOp.disabled = true;
+        plzSelectOp.text = '---Please Select---';
+        plzSelectOp.value =''; // Prevents this auto passing the required filter.
+        formElements[i].appendChild(plzSelectOp);
+  
+        data.forEach((item: { displayName: string }) => {
+          const option = document.createElement('option');
+          option.value = item.displayName;
+          option.text = item.displayName;
+          formElements[i].appendChild(option);
+        });
+      }
     }
   }
 }
