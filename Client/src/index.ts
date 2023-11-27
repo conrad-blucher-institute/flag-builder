@@ -9,6 +9,7 @@
 //  """ 
 //----------------------------------
 
+import { convertToObject } from "typescript";
 import { DSPEC } from "./DSPEC"
 
 const cardTemplates = [
@@ -301,10 +302,11 @@ function appendNextCard(cardId: string){
   }
   else if(cardId === 'InputInfo') {
     cards.insertAdjacentHTML('beforeend', cardTemplates[3]);
-    const InputInfo = document.getElementById("InputInfo")!;
-    const childNode = InputInfo.firstChild as HTMLFormElement;
-    inputIndex += 1
-    childNode.id = '${inputIndex}'
+    const Cards = document.getElementById("cards")!;
+    const InputInfo = Cards.lastChild as HTMLElement;
+    const childNode = InputInfo.children[1].firstElementChild as HTMLFormElement;
+    inputIndex++;
+    childNode.id = `${inputIndex}`
     InputInfo.addEventListener('submit', formListener);
     populateForm();
   }
