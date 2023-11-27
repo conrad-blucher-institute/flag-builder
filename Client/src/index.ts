@@ -242,13 +242,13 @@ function formListener(this: HTMLElement, e: SubmitEvent) {
       } 
       else if(submitBtnID === 'btnFinish') { // If finish btn then submit data and download
         if(isSubmitted == false) {
-          DSPECHANDLER.appendInputSpecification(formData);
+          DSPECHANDLER.appendInputSpecification(formData, inputMarkers);
         }
         DSPECHANDLER.saveDspec();
         isSubmitted = true
       }
       else if(submitBtnID === 'btnUpdate') { // If update btn then update current form data
-        DSPECHANDLER.updateInputSpecification(formID,formData);
+        DSPECHANDLER.updateInputSpecification(formID, formData, inputMarkers);
       }
       break;
     default:
