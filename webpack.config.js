@@ -18,4 +18,8 @@ module.exports = {
     filename: 'index.js',
     path: path.resolve(__dirname, 'ClientBuild'),
   },
+  optimization: {
+    minimize: false
+  },
+  mode: 'development'
 };

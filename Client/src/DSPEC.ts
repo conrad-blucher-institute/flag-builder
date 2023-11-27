@@ -44,7 +44,7 @@ class DSPEC {
         this.metaInfo = {
             modelName: mName,
             modelVersion: mVersion,
-            author: mFileName,
+            author: mAuthor,
             modelFileName: mFileName,
         }
     }
@@ -169,6 +169,160 @@ class DSPEC {
             _name: data.get('markerName'),
             _desc:  data.get('markerDesc')
         });
+    }
+
+    public parseDspecString(jsonStr: string) {
+        const json = JSON.parse(jsonStr);
+        
+        const errs: string[] = [];
+        this.metaInfo = this.parseMetaData(json, errs);
+        this.timeInfo = this.parseTimingInfo(json, errs);
+        this.outputInfo = this.parseOutputInfo(json, errs);
+        this.inputSpecifications = this.parseInputSpecifications(json, errs);
+        this.markers = json.markers ? json.markers : [];
+
+        return errs;
+
+    }
+
+    private parseMetaData(json: any, errCollection: string[]) {
+        const metaTemplate = {
+            modelName: null,
+            modelVersion: null,
+            author: null,
+            modelFileName: null
+        }
+        if(json.modelName) {
+            metaTemplate.modelName = json.modelName;
+        } else { errCollection.push(this.generateErrorMessage('MetaData', 'modelName')); }
+        if(json.modelVersion) {
+            metaTemplate.modelVersion = json.modelVersion;
+        } else { errCollection.push(this.generateErrorMessage('MetaData', 'modelVersion')); }
+        if(json.author) {
+            metaTemplate.author = json.author;
+        } else { errCollection.push(this.generateErrorMessage('MetaData', 'author')); }
+        if(json.modelFileName) {
+            metaTemplate.modelFileName = json.modelFileName;
+        } else { errCollection.push(this.generateErrorMessage('MetaData', 'modelFileName')); }  
+
+        return metaTemplate;
+    }
+
+    private parseTimingInfo(json: any, errCollection: string[]) {
+        const timingInfoTemplate = {
+            tOffset: null,
+            tInterval: null,
+        }
+
+        if(!json.timingInfo) { errCollection.push(this.generateErrorMessage('TimingInfo', 'ALL Timing Info')); }
+        else {
+            if(json.tOffset) {
+                timingInfoTemplate.tOffset = json.tOffset;
+            } else { errCollection.push(this.generateErrorMessage('TimingInfo', 'tOffset')); }
+            if(json.tInterval) {
+                timingInfoTemplate.tInterval = json.tInterval;
+            } else { errCollection.push(this.generateErrorMessage('TimingInfo', 'tInterval')); } 
+        }
+
+        return timingInfoTemplate;
+    }
+
+
+    private parseOutputInfo(json: any, errCollection: string[]) {
+        const outputInfoTemplate = {
+            outputMethod: null,
+            leadTime: null,
+            series: null,
+            location: null,
+            interval: null,
+            datum: null,
+            unit: null,
+        }
+
+        if(!json.outputInfo) { errCollection.push(this.generateErrorMessage('OutputInfo', 'ALL Output Info')); }
+        else{
+            if(json.outputMethod) {
+                outputInfoTemplate.outputMethod = json.outputMethod;
+            } else { errCollection.push(this.generateErrorMessage('OutputInfo', 'outputMethod')); }
+            if(json.leadTime) {
+                outputInfoTemplate.leadTime = json.leadTime;
+            } else { errCollection.push(this.generateErrorMessage('OutputInfo', 'leadTime')); }
+            if(json.series) {
+                outputInfoTemplate.series = json.series;
+            } else { errCollection.push(this.generateErrorMessage('OutputInfo', 'series')); }
+            if(json.location) {
+                outputInfoTemplate.location = json.location;
+            } else { errCollection.push(this.generateErrorMessage('OutputInfo', 'location')); }
+            if(json.interval) {
+                outputInfoTemplate.interval = json.interval;
+            } else { errCollection.push(this.generateErrorMessage('OutputInfo', 'interval')); }
+            if(json.datum) {
+                outputInfoTemplate.datum = json.datum;
+            } // optional
+            if(json.unit) {
+                outputInfoTemplate.unit = json.unit;
+            } else { errCollection.push(this.generateErrorMessage('OutputInfo', 'unit')); }
+        }
+
+        return outputInfoTemplate;
+    }
+
+
+    private parseInputSpecifications(json: any, errCollection: string[]) {
+        const inputSpecifications: object[] = [];
+
+        if(!json.inputs) { errCollection.push(this.generateErrorMessage('Input Specification', 'No InputSpecification')); }
+        else {
+            let index = 0;
+            json.inputs.forEach((specification: object) => {
+                inputSpecifications.push(this.parseInputSpecification(index++, specification, errCollection));
+            });
+        }
+        return inputSpecifications;
+    }
+
+    private parseInputSpecification(index: number, specification: any, errCollection: string[]): object {
+        const inputSpecificationTemplate = {
+            _name: null,
+            location: null,
+            source: null,
+            series: null,
+            unit: null,
+            type: null,
+            iInterval: null,
+        }
+
+        if(specification._name) {
+            inputSpecificationTemplate._name = specification._name;
+        } else { errCollection.push(this.generateInputSpecificationErrorMessage(index, 'Input Specification', '_name')); }
+        if(specification.location) {
+            inputSpecificationTemplate.location = specification.location;
+        } else { errCollection.push(this.generateInputSpecificationErrorMessage(index, 'Input Specification', 'location')); }
+        if(specification.source) {
+            inputSpecificationTemplate.source = specification.source;
+        } else { errCollection.push(this.generateInputSpecificationErrorMessage(index, 'Input Specification', 'source')); }
+        if(specification.series) {
+            inputSpecificationTemplate.series = specification.series;
+        } else { errCollection.push(this.generateInputSpecificationErrorMessage(index, 'Input Specification', 'series')); }
+        if(specification.unit) {
+            inputSpecificationTemplate.unit = specification.unit;
+        } else { errCollection.push(this.generateInputSpecificationErrorMessage(index, 'Input Specification', 'unit')); }
+        if(specification.type) {
+            inputSpecificationTemplate.type = specification.type;
+        } else { errCollection.push(this.generateInputSpecificationErrorMessage(index, 'Input Specification', 'type')); }
+        if(specification.iInterval) {
+            inputSpecificationTemplate.iInterval = specification.iInterval;
+        } else { errCollection.push(this.generateInputSpecificationErrorMessage(index, 'Input Specification', 'iInterval')); }
+
+        return inputSpecificationTemplate;
+    }
+
+    private generateErrorMessage(group: string, label: string): string {
+        return `ERROR in ${group}, ${label} is missing;`;
+    }
+
+    private generateInputSpecificationErrorMessage(index: number, group: string, label: string): string {
+        return `ERROR in ${group} #${index}, ${label} is missing;`;
     }
 }
 export { DSPEC }

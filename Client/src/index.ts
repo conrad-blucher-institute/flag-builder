@@ -9,7 +9,6 @@
 //  """ 
 //----------------------------------
 
-import { convertToObject } from "typescript";
 import { DSPEC } from "./DSPEC"
 
 const cardTemplates = [
@@ -198,12 +197,13 @@ async function populateForm(){
 }
 
 
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', initNewDSPECForm);
 
 
-function init(){
+function initNewDSPECForm(){
   populateForm();
   appendNextCard(''); // Appends the first card
+  initNewOrUpload() // Let them choose to fil out the form or upload a file to check
 }
 
 let inputIndex = 0;
@@ -376,6 +376,41 @@ function appendNextCard(cardId: string){
     populateForm();
   }
 }
+
+//#region First choice pop up
+const newOrCHeckPopUp = `<div class="newOrCHeckPopUp" id="newOrCHeckPopUp">
+<h1>Flag Builder</h1>
+<div>
+  <div class="uploadButtonCenterHor">
+    <button type="button" id="btnCreateNew" class="btnCreateNew">Create New</button><br>
+  </div>
+  <h2>OR</h2>
+  <input type="file" id='fUpload'></input>
+</div>
+</div>`
+
+function initNewOrUpload() {
+  // Blur everything
+  const body = document.getElementById('body')
+  body?.classList.toggle('blurAll');
+
+  // Add the pop up
+  body?.insertAdjacentHTML('beforeend', newOrCHeckPopUp);
+
+  // Add the listener to the pop up
+  const btnCreateNew = document.getElementById("btnCreateNew")!;
+  btnCreateNew.addEventListener('click', () => {
+
+    // Unblur everything
+    const body = document.getElementById('body')
+    body?.classList.remove('blurAll');
+
+    // Remove the pop up
+    document.getElementById('newOrCHeckPopUp')?.remove();
+  });
+}
+
+//#endregion
 
 
 //#region Marker Pop up

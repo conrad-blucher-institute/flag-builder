@@ -2,7 +2,7 @@ body {
     background-color: #212121;
 }
 
-.blurAll > *:not(.markerPopup) {
+.blurAll > *:not(.markerPopup, .newOrCHeckPopUp) {
     filter: blur(3px);
 }
 
@@ -65,3 +65,49 @@ input {
     transform: translate(-50%, -50%);
     z-index: 99 !important;
 }
+
+.newOrCHeckPopUp {
+
+    height: auto;
+    width: auto;
+
+    background: #b4b4b4;
+    box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.2); /* this adds the "card" effect */
+
+    border-radius: 25px;
+    padding: 20px;
+
+
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99 !important;
+}
+
+
+.newOrCHeckPopUp h1 {
+    color: #23726d;
+}
+
+.newOrCHeckPopUp h2 {
+    color: #23726d;
+    text-align: center;
+}
+
+.btnCreateNew {
+    float: left;
+}
+
+input[type="file"] {
+    background: #b4b4b4;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    transform: translate(30px, 0px);
+}
+.uploadButtonCenterHor {
+    display: table;
+    margin: 0 auto;
+}
+
