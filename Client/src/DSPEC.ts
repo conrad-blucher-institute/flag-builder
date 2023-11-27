@@ -6,12 +6,14 @@ class DSPEC {
     private timeInfo: object;
     private outputInfo: object;
     private inputSpecifications: object[];
+    private markers: object[];
 
     constructor() {
         this.metaInfo = {};
         this.timeInfo = {};
         this.outputInfo = {};
         this.inputSpecifications = [];
+        this.markers = [];
     }
 
     public saveDspec() {
@@ -20,6 +22,7 @@ class DSPEC {
         dspecData.timingInfo = this.timeInfo;
         dspecData.outputInfo = this.outputInfo;
         dspecData.inputs = this.inputSpecifications;
+        dspecData.markers = this.markers;
 
         const fileAnchor = document.createElement('a') as HTMLAnchorElement;
         var file = new Blob([JSON.stringify(dspecData)], {type: 'text/plain'})
@@ -60,7 +63,18 @@ class DSPEC {
     }
     
 
-    public updateOutput(formData: FormData) {
+    public updateOutput(formData: FormData, markers: any[]) {
+
+        // Iterate over each marker
+        markers.forEach(marker => {
+            // If a marker matches a field set it and append it to the dspec
+            if(formData.has(marker.field)){
+                formData.set(marker.field, marker.data.get('markerID'))
+                this.appendMarker(marker.data as FormData);
+            }
+        });
+
+        // Read out all the felids
         const oOutputMethod = formData.get('oOutputMethod');
         if(!oOutputMethod) { console.error('Output method not found in form submission'); }
         const oLeadTime = formData.get('oLeadTime');
@@ -72,11 +86,11 @@ class DSPEC {
         const oInterval = formData.get('oInterval');
         if(!oInterval) { console.error('Output Interval not found in form submission'); }
         const oSelectDatum = formData.get('oSelectDatum');
-        if(!oSelectDatum) { console.error('Output data series not found in form submission'); }
+        if(!oSelectDatum) { console.warn('Output data datum not found in form submission'); }
         const oSelectUnits = formData.get('oSelectUnits');
         if(!oSelectUnits) { console.error('Output unit interval not found in form submission'); }
 
-
+        // Set the DSPEC component
         this.outputInfo = {
             outputMethod: oOutputMethod,
             leadTime: oLeadTime,
@@ -87,20 +101,31 @@ class DSPEC {
             unit: oSelectUnits,
         }
     }
-    public appendInputSpecification(formData: FormData) {
-        const inputSpecification = this.parseInputSpecificationFrom(formData);
+    public appendInputSpecification(formData: FormData, markers: object[]) {
+        const inputSpecification = this.parseInputSpecificationFrom(formData, markers);
         this.inputSpecifications.push(inputSpecification);
     }
 
-    public updateInputSpecification(index: number, formData: FormData) {
+    public updateInputSpecification(index: number, formData: FormData, markers: object[]) {
 
         if(index < 0 || index >= this.inputSpecifications.length) { throw RangeError(`Form entry ${formData} caused out of range error in updateInputSpecification`); }
         else {
-            this.inputSpecifications[index] = this.parseInputSpecificationFrom(formData);
+            this.inputSpecifications[index] = this.parseInputSpecificationFrom(formData, markers);
         }
     }
 
-    private parseInputSpecificationFrom(formData: FormData): object {
+    private parseInputSpecificationFrom(formData: FormData, markers: any[]): object {
+
+
+        // Iterate over each marker
+        markers.forEach(marker => {
+            // If a marker matches a field set it and append it to the dspec
+            if(formData.has(marker.field)){
+                formData.set(marker.field, marker.data.get('markerID'))
+                this.appendMarker(marker.data as FormData);
+            }
+        });
+        
         const iName = formData.get('iName');
         if(!iName) { console.error('Input name not found in form submission'); }
         const iSelectLocation = formData.get('iSelectLocation');
@@ -126,6 +151,14 @@ class DSPEC {
             type: iType,
             iInterval: iInterval,
         }
+    }
+
+    private appendMarker(data: FormData) {
+        this.markers.push({
+            _id: data.get('markerID'),
+            _name: data.get('markerName'),
+            _desc:  data.get('markerDesc')
+        });
     }
 }
 export { DSPEC }
