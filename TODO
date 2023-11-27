@@ -12,7 +12,7 @@
 - [X] The rest of the listeners @bestrada33
 - [ ] SELECTOR BOXES not here opetion to init marker
 - [ ] Create marker pop up (send with dspec public method call)
-- [ ] SELECTOR BOXES Start with no value selected value attribute set to ""
+- [X] SELECTOR BOXES Start with no value selected value attribute set to ""
 
 # Page
 - [X] Info on hover boxes @bestrada33

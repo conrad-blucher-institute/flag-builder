@@ -1,6 +1,11 @@
 body {
     background-color: #212121;
 }
+
+.blurAll > *:not(.markerPopup) {
+    filter: blur(3px);
+}
+
 .cards {
     
     display: flex;
@@ -41,4 +46,22 @@ input {
 #helperText {
     font-size: x-small;
     display: block;
+}
+
+.markerPopup {
+    box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.2); /* this adds the "card" effect */
+    padding: 16px;
+    text-align: left;
+    height: auto;
+    width: auto;
+    border-radius: 25px;
+    background: #b4b4b4;
+    padding: 20px;
+
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99 !important;
 }

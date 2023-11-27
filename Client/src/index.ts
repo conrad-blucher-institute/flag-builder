@@ -163,20 +163,33 @@ async function populateForm(){
     
     // Add the options if the drop down doesn't already have them
     for(let i = 0; i < formElements.length; i++){ // Prevents duplicates
+
+      // Add listener to handler no option
+      formElements[i].addEventListener('change', SelectOnChangeListener);
+
       if(formElements[i].children.length <= 0) {
+
+        // Select one
         const plzSelectOp = document.createElement('option');
         plzSelectOp.defaultSelected = true;
         plzSelectOp.disabled = true;
         plzSelectOp.text = '---Please Select---';
         plzSelectOp.value =''; // Prevents this auto passing the required filter.
         formElements[i].appendChild(plzSelectOp);
-  
+        
+        // DB option
         data.forEach((item: { displayName: string }) => {
           const option = document.createElement('option');
           option.value = item.displayName;
           option.text = item.displayName;
           formElements[i].appendChild(option);
         });
+
+        // Not found option
+        const NotFoundOp = document.createElement('option');
+        NotFoundOp.text = '---Option Not Found---';
+        NotFoundOp.value ='NOTFOUND'; 
+        formElements[i].appendChild(NotFoundOp);
       }
     }
   }
@@ -192,6 +205,8 @@ function init(){
 }
 
 
+const outputMarkers: object[] = [];
+const inputMarkers: object[] = [];
 function formListener(this: HTMLElement, e: SubmitEvent) {
   e.preventDefault();
 
@@ -209,12 +224,11 @@ function formListener(this: HTMLElement, e: SubmitEvent) {
       appendNextCard(formId);
       break;
     case 'OutputInfo':
-      DSPECHANDLER.updateOutput(formData);
+      DSPECHANDLER.updateOutput(formData, outputMarkers);
       appendNextCard(formId);
       break;
     case 'InputInfo':
-
-      DSPECHANDLER.appendInputSpecification(formData);
+      DSPECHANDLER.appendInputSpecification(formData, inputMarkers);
 
       // If add btn, then submit data and add new form
       // If finish btn then submit data and download
@@ -261,4 +275,89 @@ function appendNextCard(formId: string){
   }
 }
 
+//#region Marker Pop up
 
+let markerObjectTracker: any | null  = null;
+function SelectOnChangeListener(this: HTMLSelectElement, e: Event) {
+  if(this.selectedOptions[0].value === 'NOTFOUND') {
+    markerObjectTracker = {
+      field: this.name, // The name of the field
+      parentFormID: this.parentElement?.parentElement?.id // Gets the id of the card
+    }
+    getMarker();
+  }
+}
+
+const markerPopUp = `
+<div class="markerPopup"  id="markerPopup">
+<h1>Marker</h1>
+<div>
+  <form>
+    <label>ID:</label><br>
+      <input type="text" id="markerID" name="markerID" required>
+      <small id="helperText">A ID (less than 10 characters long) to identify this attribute by.</small><br>
+
+    <label>Name:</label><br>
+      <input type="text" id="markerName" name="markerName" required>
+      <small id="helperText">A longer display name of this attribute.</small><br>
+      
+    <label for="markerDesc">Description:</label><br>
+      <textarea id="markerDesc" name="markerDesc" rows="12" cols="75"></textarea>
+      <small id="helperText">A long description of the attribute, what it is, and how to get it.</small><br>
+
+    <button type="submit">Submit</button>
+  </form>
+</div>
+</div>`
+
+function getMarker() {
+
+  // Blur everything
+  const body = document.getElementById('body')
+  body?.classList.toggle('blurAll');
+
+  // Add the pop up
+  body?.insertAdjacentHTML('beforeend', markerPopUp);
+
+  // Add the listener to the pop up
+  const markerPopup = document.getElementById("markerPopup")!;
+  markerPopup.addEventListener('submit', markerPopUpListener);
+}
+
+function markerPopUpListener(this: HTMLElement, e: Event) {
+  e.preventDefault();
+
+  // This should never be called with the even listener for the creation of the pop up, not filling the tracker object
+  if(!markerObjectTracker) {
+    console.error("The marker Pop up Submit with no object it the marker object tracker!");
+    return;
+  }
+
+  // Create a marker object
+  const marker = {
+    field: markerObjectTracker.field,
+    data: new FormData(e.target as HTMLFormElement) // The data from the marker entry
+  }
+
+  // Append the marker to the right array
+  switch(markerObjectTracker.parentFormID) {
+    case 'InputInfo':
+      inputMarkers.push(marker);
+      break;
+    case 'OutputInfo':
+      outputMarkers.push(marker);
+      break;
+    default:  
+      console.error("The marker pop up submission is reporting a form thats not input or output!");
+  }
+  markerObjectTracker = null; // Reset the tracker
+
+  // Unblur everything
+  const body = document.getElementById('body')
+  body?.classList.remove('blurAll');
+
+  // Remove the pop up
+  document.getElementById('markerPopup')?.remove();
+}
+
+//#endregion
