@@ -98,7 +98,7 @@ const cardTemplates = [
   `<div class="Card">
   <h1>Input Specification</h1>
   <div class="InputInfo" id="InputInfo">
-    <form>
+    <form id="0">
       <label>Display Name:</label><br>
         <input type="text" id="iName" name="iName" title="Display name of data variable (e.g. x_wind)" required>
         <small id="helperText">Display name of data variable (e.g. x_wind)</small><br>
@@ -191,37 +191,50 @@ function init(){
   appendNextCard(''); // Appends the first card
 }
 
-
+let inputIndex = 0;
+let isSubmitted = false;
 function formListener(this: HTMLElement, e: SubmitEvent) {
   e.preventDefault();
 
   const form = e.target! as HTMLFormElement;
-  const formId = form.parentElement!.id;
+  const cardId = form.parentElement!.id;
   const formData = new FormData(form);
   const submitBtnID = e.submitter!.id;
-  switch(formId) {
+  switch(cardId) {
     case 'MetaForm':
       DSPECHANDLER.updateMeta(formData);
-      appendNextCard(formId);
+      appendNextCard(cardId);
       break;
     case 'TimingInfo':
       DSPECHANDLER.updateTime(formData);
-      appendNextCard(formId);
+      appendNextCard(cardId);
       break;
     case 'OutputInfo':
       DSPECHANDLER.updateOutput(formData);
-      appendNextCard(formId);
+      appendNextCard(cardId);
       break;
     case 'InputInfo':
+      const formID = parseInt(form.id);
 
-      DSPECHANDLER.appendInputSpecification(formData);
+      if(submitBtnID === 'btnAdd') { // If add btn, then add new form
+        if(isSubmitted == false) {
+          DSPECHANDLER.appendInputSpecification(formData);
+        }
 
-      // If add btn, then submit data and add new form
-      // If finish btn then submit data and download
-      if(submitBtnID === 'btnAdd') {
-        appendNextCard(formId);
-      } else if(submitBtnID === 'btnFinish') {
+        isSubmitted = false;
+        updateButton();
+        hideAddButton();
+        appendNextCard(cardId);
+      } 
+      else if(submitBtnID === 'btnFinish') { // If finish btn then submit data and download
+        if(isSubmitted == false) {
+          DSPECHANDLER.appendInputSpecification(formData);
+        }
         DSPECHANDLER.saveDspec();
+        isSubmitted = true
+      }
+      else if(submitBtnID === 'btnUpdate') { // If update btn then update current form data
+        DSPECHANDLER.updateInputSpecification(formID,formData);
       }
       break;
     default:
@@ -231,31 +244,53 @@ function formListener(this: HTMLElement, e: SubmitEvent) {
 }
 
 
+function updateButton(){
+  const submitButton = document.getElementById('btnFinish') as HTMLElement;
+  submitButton.textContent = 'Update';
+  submitButton.id = 'btnUpdate';
+}
+
+
+function hideAddButton(){
+  const submitButton = document.getElementById('btnAdd') as HTMLElement;
+  submitButton.style.display = 'none';
+}
+
+
 let state = 0; // State prevents incorrect cards from being appended if a form is resubmitted
 const cards = document.getElementById('cards') as HTMLElement;
-function appendNextCard(formId: string){
-  if(formId === '' && state === 0) {
+function appendNextCard(cardId: string){
+  if(cardId === '' && state === 0) {
     cards.insertAdjacentHTML('beforeend', cardTemplates[0]);
     const metaForm = document.getElementById("MetaForm")!;
     metaForm.addEventListener('submit', formListener);
     state++;
   }
-  else if(formId === 'MetaForm' && state === 1) {
+  else if(cardId === 'MetaForm' && state === 1) {
     cards.insertAdjacentHTML('beforeend', cardTemplates[1]);
     const TimingInfo = document.getElementById("TimingInfo")!;
     TimingInfo.addEventListener('submit', formListener);
     state++;
   }
-  else if(formId === 'TimingInfo' && state === 2) {
+  else if(cardId === 'TimingInfo' && state === 2) {
     cards.insertAdjacentHTML('beforeend', cardTemplates[2]);
     const OutputInfo = document.getElementById("OutputInfo")!;
     OutputInfo.addEventListener('submit', formListener);
     populateForm();
     state++;
   }
-  else if(formId === 'OutputInfo' || formId === 'InputInfo') {
+  else if(cardId === 'OutputInfo') {
     cards.insertAdjacentHTML('beforeend', cardTemplates[3]);
     const InputInfo = document.getElementById("InputInfo")!;
+    InputInfo.addEventListener('submit', formListener);
+    populateForm();
+  }
+  else if(cardId === 'InputInfo') {
+    cards.insertAdjacentHTML('beforeend', cardTemplates[3]);
+    const InputInfo = document.getElementById("InputInfo")!;
+    const childNode = InputInfo.firstChild as HTMLFormElement;
+    inputIndex += 1
+    childNode.id = '${inputIndex}'
     InputInfo.addEventListener('submit', formListener);
     populateForm();
   }
