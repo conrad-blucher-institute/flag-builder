@@ -1,7 +1,7 @@
 # DSPEC Class
 - [X] Have a JSON template
 - [X] Have methods that the form submission can call
-- [ ] Have methods that handle marker appending
+- [X] Have methods that handle marker appending
 - [X] Download the DSPEC as JSON
 - [ ] Check a DSPEC
 - [ ] Convert times to seconds
@@ -10,8 +10,8 @@
 
 # Form Driver
 - [X] The rest of the listeners @bestrada33
-- [ ] SELECTOR BOXES not here opetion to init marker
-- [ ] Create marker pop up (send with dspec public method call)
+- [X] SELECTOR BOXES not here opetion to init marker
+- [X] Create marker pop up (send with dspec public method call)
 - [X] SELECTOR BOXES Start with no value selected value attribute set to ""
 
 # Page
