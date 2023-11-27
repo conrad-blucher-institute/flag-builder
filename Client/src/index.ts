@@ -138,6 +138,7 @@ const cardTemplates = [
 
       <button type="submit" name="btnFinish" id="btnFinish">Finish & Download</button>
       <button type="submit" name="btnAdd" id="btnAdd">Add Specification</button>
+      <button type="click" name="btnDelete" id="btnDelete" style="display: none;">Delete</button>
     </form>
   </div>
 </div>`
@@ -209,7 +210,7 @@ let inputIndex = 0;
 let isSubmitted = false;
 const outputMarkers: object[] = [];
 const inputMarkers: object[] = [];
-function formListener(this: HTMLElement, e: SubmitEvent) {
+function submitFormListener(this: HTMLElement, e: SubmitEvent) {
   e.preventDefault();
 
   const form = e.target! as HTMLFormElement;
@@ -232,17 +233,24 @@ function formListener(this: HTMLElement, e: SubmitEvent) {
     case 'InputInfo':
       const formID = parseInt(form.id);
       if(submitBtnID === 'btnAdd') { // If add btn, then add new form
-        if(isSubmitted == false) {
+        if(inputIndex < DSPECHANDLER.getInputSpecificationLength()){
+          DSPECHANDLER.updateInputSpecification(inputIndex, formData, inputMarkers);
+        }
+        else{
           DSPECHANDLER.appendInputSpecification(formData, inputMarkers);
         }
 
         isSubmitted = false;
-        updateButton(form);
+        showUpdateButton(form);
         hideAddButton(form);
+        hideDeleteButton(form);
         appendNextCard(cardId);
       } 
       else if(submitBtnID === 'btnFinish') { // If finish btn then submit data and download
-        if(isSubmitted == false) {
+        if(inputIndex < DSPECHANDLER.getInputSpecificationLength()){
+          DSPECHANDLER.updateInputSpecification(inputIndex, formData, inputMarkers);
+        }
+        else{
           DSPECHANDLER.appendInputSpecification(formData, inputMarkers);
         }
         DSPECHANDLER.saveDspec();
@@ -259,18 +267,69 @@ function formListener(this: HTMLElement, e: SubmitEvent) {
 }
 
 
-function updateButton(form: HTMLFormElement){
-  //const submitButton = form.getElementById('btnFinish') as HTMLElement;
-  const submitButton = form.btnFinish as HTMLElement
+function showUpdateButton(form: HTMLFormElement){
+  const submitButton = form.btnFinish as HTMLButtonElement
   submitButton.textContent = 'Update';
   submitButton.id = 'btnUpdate';
+  submitButton.name = "btnUpdate"
+}
+
+
+function showFinishButton(form: HTMLFormElement){
+  const submitButton = form.btnUpdate as HTMLButtonElement
+  submitButton.textContent = 'Finish & Download';
+  submitButton.id = 'btnFinish';
+  submitButton.name = "btnFinish"
 }
 
 
 function hideAddButton(form: HTMLFormElement){
-  //const submitButton = form.getElementById('btnAdd') as HTMLElement;
-  const submitButton = form.btnAdd as HTMLElement
+  const submitButton = form.btnAdd as HTMLButtonElement
   submitButton.style.display = 'none';
+}
+
+
+function showAddButton(form: HTMLFormElement){
+  const submitButton = form.btnAdd as HTMLButtonElement
+  submitButton.style.display = '';
+}
+
+
+function addDeleteButton(form: HTMLFormElement, card: HTMLElement, cards: HTMLElement){
+  const deleteButton = form.btnDelete as HTMLButtonElement
+  deleteButton.style.display = '';
+  deleteButton.addEventListener('click', () => {
+    if(parseInt(form.id) < DSPECHANDLER.getInputSpecificationLength()){
+      DSPECHANDLER.removeInputSpecification(parseInt(form.id));
+    }
+    
+    card.remove();
+
+    inputIndex--;
+
+    const previousCard = cards.lastChild as HTMLElement;
+    const previousForm = previousCard.children[1].firstElementChild as HTMLFormElement;
+
+    showAddButton(previousForm);
+    showFinishButton(previousForm);
+    if(inputIndex != 0){
+      showDeleteButton(previousForm);
+    }
+  });
+
+  form.appendChild(deleteButton);
+}
+
+
+function showDeleteButton(form: HTMLFormElement){
+  const deleteButton = form.btnDelete as HTMLButtonElement
+  deleteButton.style.display = '';
+}
+
+
+function hideDeleteButton(form: HTMLFormElement){
+  const deleteButton = form.btnDelete as HTMLButtonElement
+  deleteButton.style.display = 'none';
 }
 
 
@@ -280,26 +339,26 @@ function appendNextCard(cardId: string){
   if(cardId === '' && state === 0) {
     cards.insertAdjacentHTML('beforeend', cardTemplates[0]);
     const metaForm = document.getElementById("MetaForm")!;
-    metaForm.addEventListener('submit', formListener);
+    metaForm.addEventListener('submit', submitFormListener);
     state++;
   }
   else if(cardId === 'MetaForm' && state === 1) {
     cards.insertAdjacentHTML('beforeend', cardTemplates[1]);
     const TimingInfo = document.getElementById("TimingInfo")!;
-    TimingInfo.addEventListener('submit', formListener);
+    TimingInfo.addEventListener('submit', submitFormListener);
     state++;
   }
   else if(cardId === 'TimingInfo' && state === 2) {
     cards.insertAdjacentHTML('beforeend', cardTemplates[2]);
     const OutputInfo = document.getElementById("OutputInfo")!;
-    OutputInfo.addEventListener('submit', formListener);
+    OutputInfo.addEventListener('submit', submitFormListener);
     populateForm();
     state++;
   }
   else if(cardId === 'OutputInfo') {
     cards.insertAdjacentHTML('beforeend', cardTemplates[3]);
     const InputInfo = document.getElementById("InputInfo")!;
-    InputInfo.addEventListener('submit', formListener);
+    InputInfo.addEventListener('submit', submitFormListener);
     populateForm();
   }
   else if(cardId === 'InputInfo') {
@@ -307,15 +366,19 @@ function appendNextCard(cardId: string){
     const Cards = document.getElementById("cards")!;
     const InputInfo = Cards.lastChild as HTMLElement;
     const childNode = InputInfo.children[1].firstElementChild as HTMLFormElement;
+
     inputIndex++;
     childNode.id = `${inputIndex}`
-    InputInfo.addEventListener('submit', formListener);
+    addDeleteButton(childNode, InputInfo, cards)
+
+    InputInfo.addEventListener('submit', submitFormListener);
+
     populateForm();
   }
 }
 
-//#region Marker Pop up
 
+//#region Marker Pop up
 let markerObjectTracker: any | null  = null;
 function SelectOnChangeListener(this: HTMLSelectElement, e: Event) {
   if(this.selectedOptions[0].value === 'NOTFOUND') {
@@ -326,6 +389,7 @@ function SelectOnChangeListener(this: HTMLSelectElement, e: Event) {
     getMarker();
   }
 }
+
 
 const markerPopUp = `
 <div class="markerPopup"  id="markerPopup">
@@ -349,8 +413,8 @@ const markerPopUp = `
 </div>
 </div>`
 
-function getMarker() {
 
+function getMarker() {
   // Blur everything
   const body = document.getElementById('body')
   body?.classList.toggle('blurAll');
@@ -362,6 +426,7 @@ function getMarker() {
   const markerPopup = document.getElementById("markerPopup")!;
   markerPopup.addEventListener('submit', markerPopUpListener);
 }
+
 
 function markerPopUpListener(this: HTMLElement, e: Event) {
   e.preventDefault();

@@ -118,9 +118,11 @@ class DSPEC {
 
         if(index < 0 || index >= this.inputSpecifications.length) { throw RangeError(`Index:${index} caused out of range error in removeInputSpecification`); }
         else {
-            this.inputSpecifications.slice(index, 1);
+            this.inputSpecifications = this.inputSpecifications.slice(0, index).concat(this.inputSpecifications.slice(index + 1));
         }
     }
+
+    public getInputSpecificationLength() { return this.inputSpecifications.length; }
 
     private parseInputSpecificationFrom(formData: FormData, markers: any[]): object {
 
