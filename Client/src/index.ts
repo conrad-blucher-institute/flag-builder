@@ -136,8 +136,8 @@ const cardTemplates = [
         <input type="text" pattern="^(0?[0-9]?[0-9]|1[0-6][0-8]):[0-5][0-9]:[0-5][0-9]$" placeholder="00:00:00" id="iInterval" name="iInterval" title="Time between each model prediction. HH:MM:SS (e.g. 01:00:00 (1hr))" required>
         <small id="helperText">Time between each model prediction. HH:MM:SS (e.g. 01:00:00 (1hr))</small><br>
 
-      <button type="submit" id="btnFinish">Finish & Download</button>
-      <button type="submit" id="btnAdd">Add Specification</button>
+      <button type="submit" name="btnFinish" id="btnFinish">Finish & Download</button>
+      <button type="submit" name="btnAdd" id="btnAdd">Add Specification</button>
     </form>
   </div>
 </div>`
@@ -237,8 +237,8 @@ function formListener(this: HTMLElement, e: SubmitEvent) {
         }
 
         isSubmitted = false;
-        updateButton();
-        hideAddButton();
+        updateButton(form);
+        hideAddButton(form);
         appendNextCard(cardId);
       } 
       else if(submitBtnID === 'btnFinish') { // If finish btn then submit data and download
@@ -259,15 +259,17 @@ function formListener(this: HTMLElement, e: SubmitEvent) {
 }
 
 
-function updateButton(){
-  const submitButton = document.getElementById('btnFinish') as HTMLElement;
+function updateButton(form: HTMLFormElement){
+  //const submitButton = form.getElementById('btnFinish') as HTMLElement;
+  const submitButton = form.btnFinish as HTMLElement
   submitButton.textContent = 'Update';
   submitButton.id = 'btnUpdate';
 }
 
 
-function hideAddButton(){
-  const submitButton = document.getElementById('btnAdd') as HTMLElement;
+function hideAddButton(form: HTMLFormElement){
+  //const submitButton = form.getElementById('btnAdd') as HTMLElement;
+  const submitButton = form.btnAdd as HTMLElement
   submitButton.style.display = 'none';
 }
 
