@@ -16,7 +16,9 @@
 
 # Page
 - [X] Info on hover boxes @bestrada33
-- [ ] Delete extra form btn @bestrada33
+- [X] Delete extra form btn @bestrada33
+- [ ] Update markers if index exists instead of always appending
+- [ ] If you click marker on accident there is no leaving. Add exit button to marker screen
 - [X] Input form should update input not append a new one on resubmission
 - [X] Final submit btn @bestrada33
 - [X] Change how time selection is working
