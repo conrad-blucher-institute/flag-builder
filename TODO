@@ -4,7 +4,7 @@
 - [X] Have methods that handle marker appending
 - [X] Download the DSPEC as JSON
 - [ ] Check a DSPEC
-- [ ] Convert times to seconds
+- [X] Convert times to seconds
 - [X] Datum should be optional
 
 

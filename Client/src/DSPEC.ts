@@ -51,14 +51,14 @@ class DSPEC {
 
 
     public updateTime(formData: FormData) {
-        const tOffset = formData.get('tOffset');
+        const tOffset = formData.get('tOffset') as string;
         if(!tOffset) { console.error('Time offset not found in form submission'); }
-        const tInterval = formData.get('tInterval');
+        const tInterval = formData.get('tInterval') as string;
         if(!tInterval) { console.error('Time Interval not found in form submission'); }
 
         this.timeInfo = {
-            tOffset: tOffset,
-            tInterval: tInterval,
+            tOffset: this.timeStringToSeconds(tOffset),
+            tInterval: this.timeStringToSeconds(tInterval),
         }
     }
     
@@ -77,13 +77,13 @@ class DSPEC {
         // Read out all the felids
         const oOutputMethod = formData.get('oOutputMethod');
         if(!oOutputMethod) { console.error('Output method not found in form submission'); }
-        const oLeadTime = formData.get('oLeadTime');
+        const oLeadTime = formData.get('oLeadTime') as string;
         if(!oLeadTime) { console.error('Output lead time not found in form submission'); }
         const oSeries = formData.get('oSeries');
         if(!oSeries) { console.error('Output data series not found in form submission'); }
         const oSelectLocation = formData.get('oSelectLocation');
         if(!oSelectLocation) { console.error('Output data location not found in form submission'); }
-        const oInterval = formData.get('oInterval');
+        const oInterval = formData.get('oInterval') as string;
         if(!oInterval) { console.error('Output Interval not found in form submission'); }
         const oSelectDatum = formData.get('oSelectDatum');
         if(!oSelectDatum) { console.warn('Output data datum not found in form submission'); }
@@ -93,10 +93,10 @@ class DSPEC {
         // Set the DSPEC component
         this.outputInfo = {
             outputMethod: oOutputMethod,
-            leadTime: oLeadTime,
+            leadTime: this.timeStringToSeconds(oLeadTime),
             series: oSeries,
             location: oSelectLocation,
-            interval: oInterval,
+            interval: this.timeStringToSeconds(oInterval),
             datum: oSelectDatum,
             unit: oSelectUnits,
         }
@@ -148,7 +148,7 @@ class DSPEC {
         if(!iSelectUnits) { console.error('Input units not found in form submission'); }
         const iType = formData.get('iType');
         if(!iType) { console.error('Input type not found in form submission'); }
-        const iInterval = formData.get('iInterval');
+        const iInterval = formData.get('iInterval') as string;
         if(!iInterval) { console.error('Input interval series not found in form submission'); }
 
 
@@ -159,7 +159,7 @@ class DSPEC {
             series: iSelectSeries,
             unit: iSelectUnits,
             type: iType,
-            iInterval: iInterval,
+            iInterval: this.timeStringToSeconds(iInterval),
         }
     }
 
@@ -185,6 +185,21 @@ class DSPEC {
 
     }
 
+    public timeStringToSeconds(timeString: string): number {
+        const [hours, minutes, seconds] = timeString.split(':').map(Number);
+    
+        // Check if the string has valid components
+        if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) {
+            throw new Error('Invalid time string format');
+        }
+    
+        // Calculate total seconds
+        const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+    
+        return totalSeconds;
+    }
+
+    // Private methods
     private parseMetaData(json: any, errCollection: string[]) {
         const metaTemplate = {
             modelName: null,
