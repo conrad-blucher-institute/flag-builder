@@ -207,7 +207,6 @@ function initNewDSPECForm(){
 }
 
 let inputIndex = 0;
-let isSubmitted = false;
 const outputMarkers: object[] = [];
 const inputMarkers: object[] = [];
 function submitFormListener(this: HTMLElement, e: SubmitEvent) {
@@ -240,7 +239,6 @@ function submitFormListener(this: HTMLElement, e: SubmitEvent) {
           DSPECHANDLER.appendInputSpecification(formData, inputMarkers);
         }
 
-        isSubmitted = false;
         showUpdateButton(form);
         hideAddButton(form);
         hideDeleteButton(form);
@@ -254,7 +252,6 @@ function submitFormListener(this: HTMLElement, e: SubmitEvent) {
           DSPECHANDLER.appendInputSpecification(formData, inputMarkers);
         }
         DSPECHANDLER.saveDspec();
-        isSubmitted = true
       }
       else if(submitBtnID === 'btnUpdate') { // If update btn then update current form data
         DSPECHANDLER.updateInputSpecification(formID, formData, inputMarkers);
@@ -338,40 +335,51 @@ const cards = document.getElementById('cards') as HTMLElement;
 function appendNextCard(cardId: string){
   if(cardId === '' && state === 0) {
     cards.insertAdjacentHTML('beforeend', cardTemplates[0]);
-    const metaForm = document.getElementById("MetaForm")!;
-    metaForm.addEventListener('submit', submitFormListener);
+    const formDiv = document.getElementById("MetaForm")!;
+    const parentDiv = formDiv.parentNode as HTMLElement;
+    parentDiv.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+    formDiv.addEventListener('submit', submitFormListener);
     state++;
   }
   else if(cardId === 'MetaForm' && state === 1) {
     cards.insertAdjacentHTML('beforeend', cardTemplates[1]);
-    const TimingInfo = document.getElementById("TimingInfo")!;
-    TimingInfo.addEventListener('submit', submitFormListener);
+    const formDiv = document.getElementById("TimingInfo")!;
+    const parentDiv = formDiv.parentNode as HTMLElement;
+    parentDiv.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+    formDiv.addEventListener('submit', submitFormListener);
     state++;
   }
   else if(cardId === 'TimingInfo' && state === 2) {
     cards.insertAdjacentHTML('beforeend', cardTemplates[2]);
-    const OutputInfo = document.getElementById("OutputInfo")!;
-    OutputInfo.addEventListener('submit', submitFormListener);
+    const formDiv = document.getElementById("OutputInfo")!;
+    const parentDiv = formDiv.parentNode as HTMLElement;
+    parentDiv.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+    formDiv.addEventListener('submit', submitFormListener);
     populateForm();
     state++;
   }
   else if(cardId === 'OutputInfo') {
     cards.insertAdjacentHTML('beforeend', cardTemplates[3]);
-    const InputInfo = document.getElementById("InputInfo")!;
-    InputInfo.addEventListener('submit', submitFormListener);
+    const formDiv = document.getElementById("InputInfo")!;
+    const parentDiv = formDiv.parentNode as HTMLElement;
+    parentDiv.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+    formDiv.addEventListener('submit', submitFormListener);
     populateForm();
   }
   else if(cardId === 'InputInfo') {
     cards.insertAdjacentHTML('beforeend', cardTemplates[3]);
     const Cards = document.getElementById("cards")!;
-    const InputInfo = Cards.lastChild as HTMLElement;
-    const childNode = InputInfo.children[1].firstElementChild as HTMLFormElement;
+
+    const formDiv = Cards.lastChild as HTMLElement;
+    const parentDiv = formDiv.parentNode as HTMLElement;
+    parentDiv.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+    const childNode = formDiv.children[1].firstElementChild as HTMLFormElement;
 
     inputIndex++;
     childNode.id = `${inputIndex}`
-    addDeleteButton(childNode, InputInfo, cards)
+    addDeleteButton(childNode, formDiv, cards)
 
-    InputInfo.addEventListener('submit', submitFormListener);
+    formDiv.addEventListener('submit', submitFormListener);
 
     populateForm();
   }

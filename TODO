@@ -26,4 +26,4 @@
 - [ ] Need range for the input specification
 - [ ] Need datum for the input specification
 - [X] On first load, choose to upload file to check, or make a new one
-- [ ] Auto scrolling
+- [X] Auto scrolling
