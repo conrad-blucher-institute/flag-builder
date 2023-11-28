@@ -318,6 +318,19 @@ function addDeleteButton(form: HTMLFormElement, card: HTMLElement, cards: HTMLEl
 }
 
 
+function addCloseButtonListener(form: HTMLFormElement){
+  const closeButton = form.btnClose;
+
+  closeButton.addEventListener('click', () => { 
+    document.getElementById('markerPopup')?.remove();
+
+    // Unblur everything
+    const body = document.getElementById('body')
+    body?.classList.remove('blurAll');
+  });
+}
+
+
 function showDeleteButton(form: HTMLFormElement){
   const deleteButton = form.btnDelete as HTMLButtonElement
   deleteButton.style.display = '';
@@ -438,7 +451,7 @@ const markerPopUp = `
 <div class="markerPopup"  id="markerPopup">
 <h1>Marker</h1>
 <div>
-  <form>
+  <form id="markerPopupForm">
     <label>ID:</label><br>
       <input type="text" id="markerID" name="markerID" required>
       <small id="helperText">A ID (less than 10 characters long) to identify this attribute by.</small><br>
@@ -452,6 +465,7 @@ const markerPopUp = `
       <small id="helperText">A long description of the attribute, what it is, and how to get it.</small><br>
 
     <button type="submit">Submit</button>
+    <button type="click" name="btnClose">Close</button>
   </form>
 </div>
 </div>`
@@ -468,6 +482,10 @@ function getMarker() {
   // Add the listener to the pop up
   const markerPopup = document.getElementById("markerPopup")!;
   markerPopup.addEventListener('submit', markerPopUpListener);
+
+  const markerPopupForm = document.getElementById("markerPopupForm") as HTMLFormElement;
+  // Add a hide button
+  addCloseButtonListener(markerPopupForm)
 }
 
 
