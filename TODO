@@ -22,7 +22,7 @@
 - [X] Input form should update input not append a new one on resubmission
 - [X] Final submit btn @bestrada33
 - [X] Change how time selection is working
-- [ ] Add banner (CDL logo)
+- [X] Add banner (CDL logo)
 - [ ] Need range for the input specification
 - [ ] Need datum for the input specification
 - [X] On first load, choose to upload file to check, or make a new one
