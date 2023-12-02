@@ -586,6 +586,8 @@ async function initReportPopUp(jsonString: string) {
   const markerLefttxtb = document.getElementById('markerNumberLeft') as HTMLTextAreaElement;
   markerLefttxtb.append(dspec.getMarkersLength().toString());
 
+  dspec.saveDspec();
+
   // Add listener to ok button that restarts the form when pressed
   const btnCreateNew = document.getElementById("btnReportOkay")!;
   btnCreateNew.addEventListener('click', () => {
