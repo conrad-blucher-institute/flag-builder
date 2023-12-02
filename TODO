@@ -3,7 +3,7 @@
 - [X] Have methods that the form submission can call
 - [X] Have methods that handle marker appending
 - [X] Download the DSPEC as JSON
-- [ ] Check a DSPEC
+- [X] Check a DSPEC
 - [X] Convert times to seconds
 - [X] Datum should be optional
 

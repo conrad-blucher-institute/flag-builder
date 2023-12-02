@@ -10,6 +10,7 @@
 //----------------------------------
 
 import { DSPEC } from "./DSPEC"
+import { ServerComms } from './ServerComms';
 
 const cardTemplates = [
   `<div class="cards">
@@ -143,7 +144,6 @@ const cardTemplates = [
 </div>`
 ]
 
-import { ServerComms } from './ServerComms';
 
 let sc = new ServerComms('http://localhost:8000');
 
@@ -406,7 +406,7 @@ const newOrCHeckPopUp = `<div class="newOrCHeckPopUp" id="newOrCHeckPopUp">
     <button type="button" id="btnCreateNew" class="btnCreateNew">Create New</button><br>
   </div>
   <h2>OR</h2>
-  <input type="file" id='fUpload'></input>
+  <input type="file" id='fUpload' accept="text/json" name="files[]" size=1></input>
 </div>
 </div>`
 
@@ -428,6 +428,23 @@ function initNewOrUpload() {
 
     // Remove the pop up
     document.getElementById('newOrCHeckPopUp')?.remove();
+  });
+
+  const fUpload = document.getElementById("fUpload")!;
+  fUpload.addEventListener('change', (event: Event) => {
+    const fInput = event.target! as HTMLInputElement;
+    const file = fInput.files![0];
+    
+    // Read the file and once the file is loaded and read, move to report popup
+    const reader = new FileReader();
+    reader.addEventListener("loadend", () => {    
+      // Remove the pop up
+      document.getElementById('newOrCHeckPopUp')?.remove();
+
+      // Move to next popup
+      initReportPopUp(reader.result as string)
+    }); 
+    reader.readAsText(file);
   });
 }
 
@@ -523,6 +540,57 @@ function markerPopUpListener(this: HTMLElement, e: Event) {
 
   // Remove the pop up
   document.getElementById('markerPopup')?.remove();
+}
+
+//#endregion
+
+
+
+//#region DPSEC REPORT POP UP
+const reportPopUp = `<div class="reportPopUp" id="reportPopUp">
+<h1>REPORT</h1>
+  <div>
+    <textarea readonly id="reportPopUpTextArea" name="reportPopUpTextArea" rows="12" cols="75"></textarea>
+  </div>
+  <div style="display: flex; justify-content: space-around;">
+    <div>
+      <label for="markersLeft">Markers Left:</label><br>
+      <textarea readonly id="markerNumberLeft" name="markerNumberLeft" rows="1" cols="1" style="font-size: 50px; width: 100px; height: 50px; text-align: center;"></textarea>
+    </div>
+    <div>
+      <label for="markersFound">Markers Found:</label><br>
+      <textarea readonly id="markerNumberFound" name="markerNumberFound" rows="1" cols="1" style="font-size: 50px; width: 100px; height: 50px; text-align: center;"></textarea>
+    </div>
+  </div>
+  <button type="button" id="btnReportOkay" class="">OK</button><br>
+</div>`
+
+async function initReportPopUp(jsonString: string) {
+
+  // Add the pop up
+  const body = document.getElementById('body');
+  body?.insertAdjacentHTML('beforeend', reportPopUp);
+
+  const dspec = new DSPEC();
+  const parseReport = dspec.parseDspecString(jsonString) 
+
+
+  const reportTextAreaElement = document.getElementById('reportPopUpTextArea') as HTMLTextAreaElement;
+  parseReport.forEach((str: string) => {reportTextAreaElement.append(str + '\n')});
+
+  const markerFoundtxtb = document.getElementById('markerNumberFound') as HTMLTextAreaElement;
+  markerFoundtxtb.append(dspec.getMarkersLength().toString());
+
+  await dspec.tryResolveMarkers();
+
+  const markerLefttxtb = document.getElementById('markerNumberLeft') as HTMLTextAreaElement;
+  markerLefttxtb.append(dspec.getMarkersLength().toString());
+
+  // Add listener to ok button that restarts the form when pressed
+  const btnCreateNew = document.getElementById("btnReportOkay")!;
+  btnCreateNew.addEventListener('click', () => {
+    location.reload(); // refreash the page
+  });
 }
 
 //#endregion

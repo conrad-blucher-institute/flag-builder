@@ -1,4 +1,4 @@
-
+import { ServerComms } from './ServerComms';
 
 class DSPEC {
 
@@ -70,7 +70,7 @@ class DSPEC {
             // If a marker matches a field set it and append it to the dspec
             if(formData.has(marker.field)){
                 formData.set(marker.field, marker.data.get('markerID'))
-                this.appendMarker(marker.data as FormData);
+                this.appendMarker(marker.data as FormData, marker.field);
             }
         });
 
@@ -132,7 +132,7 @@ class DSPEC {
             // If a marker matches a field set it and append it to the dspec
             if(formData.has(marker.field)){
                 formData.set(marker.field, marker.data.get('markerID'))
-                this.appendMarker(marker.data as FormData);
+                this.appendMarker(marker.data as FormData, marker.field);
             }
         });
         
@@ -163,11 +163,12 @@ class DSPEC {
         }
     }
 
-    private appendMarker(data: FormData) {
+    private appendMarker(data: FormData, field: string) {
         this.markers.push({
             _id: data.get('markerID'),
             _name: data.get('markerName'),
-            _desc:  data.get('markerDesc')
+            _desc:  data.get('markerDesc'),
+            _field: field
         });
     }
 
@@ -231,11 +232,12 @@ class DSPEC {
 
         if(!json.timingInfo) { errCollection.push(this.generateErrorMessage('TimingInfo', 'ALL Timing Info')); }
         else {
-            if(json.tOffset) {
-                timingInfoTemplate.tOffset = json.tOffset;
+            const TI = json.timingInfo;
+            if(TI.tOffset) {
+                timingInfoTemplate.tOffset = TI.tOffset;
             } else { errCollection.push(this.generateErrorMessage('TimingInfo', 'tOffset')); }
-            if(json.tInterval) {
-                timingInfoTemplate.tInterval = json.tInterval;
+            if(TI.tInterval) {
+                timingInfoTemplate.tInterval = TI.tInterval;
             } else { errCollection.push(this.generateErrorMessage('TimingInfo', 'tInterval')); } 
         }
 
@@ -256,26 +258,27 @@ class DSPEC {
 
         if(!json.outputInfo) { errCollection.push(this.generateErrorMessage('OutputInfo', 'ALL Output Info')); }
         else{
-            if(json.outputMethod) {
-                outputInfoTemplate.outputMethod = json.outputMethod;
+            const OI = json.outputInfo;
+            if(OI.outputMethod) {
+                outputInfoTemplate.outputMethod = OI.outputMethod;
             } else { errCollection.push(this.generateErrorMessage('OutputInfo', 'outputMethod')); }
-            if(json.leadTime) {
-                outputInfoTemplate.leadTime = json.leadTime;
+            if(OI.leadTime) {
+                outputInfoTemplate.leadTime = OI.leadTime;
             } else { errCollection.push(this.generateErrorMessage('OutputInfo', 'leadTime')); }
-            if(json.series) {
-                outputInfoTemplate.series = json.series;
+            if(OI.series) {
+                outputInfoTemplate.series = OI.series;
             } else { errCollection.push(this.generateErrorMessage('OutputInfo', 'series')); }
-            if(json.location) {
-                outputInfoTemplate.location = json.location;
+            if(OI.location) {
+                outputInfoTemplate.location = OI.location;
             } else { errCollection.push(this.generateErrorMessage('OutputInfo', 'location')); }
-            if(json.interval) {
-                outputInfoTemplate.interval = json.interval;
+            if(OI.interval) {
+                outputInfoTemplate.interval = OI.interval;
             } else { errCollection.push(this.generateErrorMessage('OutputInfo', 'interval')); }
-            if(json.datum) {
-                outputInfoTemplate.datum = json.datum;
+            if(OI.datum) {
+                outputInfoTemplate.datum = OI.datum;
             } // optional
-            if(json.unit) {
-                outputInfoTemplate.unit = json.unit;
+            if(OI.unit) {
+                outputInfoTemplate.unit = OI.unit;
             } else { errCollection.push(this.generateErrorMessage('OutputInfo', 'unit')); }
         }
 
@@ -338,6 +341,36 @@ class DSPEC {
 
     private generateInputSpecificationErrorMessage(index: number, group: string, label: string): string {
         return `ERROR in ${group} #${index}, ${label} is missing;`;
+    }
+
+    public getMarkersLength() { return this.markers.length; }
+
+    public async tryResolveMarkers() {
+        
+        
+        let sc = new ServerComms('http://localhost:8000');
+        let source = await sc.requestVariable('source');
+        let series = await sc.requestVariable('series');
+        let location = await sc.requestVariable('location');
+        let units = await sc.requestVariable('units');
+        let datum = await sc.requestVariable('datum');
+        const allRows = source.concat(series.concat(location.concat(units.concat(datum))));
+
+
+        let newMarkers: object[] = [];
+        // Iterate over each marker
+        this.markers.forEach(marker => {
+            // If a marker matches a field set it and append it to the dspec
+            marker['_id' as keyof typeof marker] in source
+
+            allRows.forEach((row: object) => {
+                if(!marker['_id' as keyof typeof marker] == row['code' as keyof typeof row]) {
+                    newMarkers.push(marker);
+                } 
+            });
+        });
+
+        this.markers = newMarkers;
     }
 }
 export { DSPEC }

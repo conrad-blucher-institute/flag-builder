@@ -2,7 +2,7 @@ body {
     background-color: #212121;
 }
 
-.blurAll > *:not(.markerPopup, .newOrCHeckPopUp) {
+.blurAll > *:not(.markerPopup, .newOrCHeckPopUp, .reportPopUp) {
     filter: blur(3px);
 }
 
@@ -133,5 +133,32 @@ input[type="file"] {
 .uploadButtonCenterHor {
     display: table;
     margin: 0 auto;
+}
+
+
+
+
+.reportPopUp {
+
+    height: auto;
+    width: auto;
+
+    background: #b4b4b4;
+    box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.2); /* this adds the "card" effect */
+
+    border-radius: 25px;
+    padding: 20px;
+
+
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99 !important;
+}
+
+.reportPopUp textarea {
+    background: #000000;
+    color: red;
 }
 
